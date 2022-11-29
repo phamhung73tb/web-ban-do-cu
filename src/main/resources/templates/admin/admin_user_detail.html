@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin tài khoản</title>
+    <div th:replace="fragment::head-custom"></div>
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="padding-top: 13px;">
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-12">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/user/get-all}">Quản lý người dùng</a></li>
+                    <li class="breadcrumb-item active">[[${userResponse.username}]]</li>
+                  </ol>
+                </div>
+              </div>
+            </div><!-- /.container-fluid -->
+          </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <!-- Profile Image -->
+                        <div class="card card-primary card-outline">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    <img class="profile-user-img img-fluid img-circle"
+                                        th:src="${userResponse.apiGetAvatar}" alt="User profile picture">
+                                </div>
+                                
+                                <p class="text-muted text-center">[[${userResponse.username}]]</p>
+
+                                <h3 class="profile-username text-center">[[${userResponse.fullName}]]</h3>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="active tab-pane" id="activity">
+                                        <form class="form-horizontal">
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Tên đăng nhập</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Tên đăng nhập" th:value="${userResponse.username}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Họ và tên</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Họ và tên"  th:value="${userResponse.fullName}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                                <div class="col-sm-10">
+                                                    <input type="email" class="form-control" id="inputEmail"
+                                                        placeholder="Email"  th:value="${userResponse.email}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputName2" class="col-sm-2 col-form-label">Số điện thoại</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Số điên thoại"  th:value="${userResponse.cellphone}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputName2" class="col-sm-2 col-form-label">Trạng thái</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="inputName2"
+                                                        placeholder="Trạng thái"  th:value="${userResponse.status}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="col-sm-2 col-form-label"></label>
+                                                <a th:href="@{'/admin/user/edit/' + ${userResponse.id}}" class="btn btn-info btn-sm"
+                                                    style="width:15%">Sửa</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                </div>
+                                <!-- /.tab-content -->
+                            </div><!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+
+    <div th:replace="fragment::footer-admin"></div>
+
+    <div th:replace="fragment::script-custom"></div>
+</body>
+
+</html>

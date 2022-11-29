@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Tin nhắn</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+        body {
+            background-color: #f4f7f6;
+        }
+
+        .card {
+            background: #fff;
+            transition: .5s;
+            border: 0;
+            margin-bottom: 30px;
+            border-radius: .55rem;
+            position: relative;
+            width: 100%;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+        }
+
+        .chat-app .people-list {
+            width: 280px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 20px;
+            z-index: 7
+        }
+
+        .chat-app .chat {
+            margin-left: 280px;
+            border-left: 1px solid #eaeaea
+        }
+
+        .people-list {
+            -moz-transition: .5s;
+            -o-transition: .5s;
+            -webkit-transition: .5s;
+            transition: .5s
+        }
+
+        .people-list .chat-list li {
+            padding: 10px 15px;
+            list-style: none;
+            border-radius: 3px
+        }
+
+        .people-list .chat-list li:hover {
+            background: #efefef;
+            cursor: pointer
+        }
+
+        .people-list .chat-list li.active {
+            background: #efefef
+        }
+
+        .people-list .chat-list li .name {
+            font-size: 15px
+        }
+
+        .people-list .chat-list img {
+            width: 45px;
+            border-radius: 50%
+        }
+
+        .people-list img {
+            float: left;
+            border-radius: 50%
+        }
+
+        .people-list .about {
+            float: left;
+            padding-left: 8px
+        }
+
+        .people-list .status {
+            color: #999;
+            font-size: 13px
+        }
+
+        .chat .chat-header {
+            padding: 15px 20px;
+            border-bottom: 2px solid #f4f7f6
+        }
+
+        .chat .chat-header img {
+            float: left;
+            border-radius: 40px;
+            width: 40px
+        }
+
+        .chat .chat-header .chat-about {
+            float: left;
+            padding-left: 10px
+        }
+
+        .chat .chat-history {
+            padding: 20px;
+            border-bottom: 2px solid #fff
+        }
+
+        .chat .chat-history ul {
+            padding: 0
+        }
+
+        .chat .chat-history ul li {
+            list-style: none;
+            margin-bottom: 30px
+        }
+
+        .chat .chat-history ul li:last-child {
+            margin-bottom: 0px
+        }
+
+        .chat .chat-history .message-data {
+            margin-bottom: 15px
+        }
+
+        .chat .chat-history .message-data img {
+            border-radius: 40px;
+            width: 40px
+        }
+
+        .chat .chat-history .message-data-time {
+            color: #434651;
+            padding-left: 6px
+        }
+
+        .chat .chat-history .message {
+            color: #444;
+            padding: 18px 20px;
+            line-height: 26px;
+            font-size: 14px;
+            border-radius: 7px;
+            display: inline-block;
+            position: relative
+        }
+
+        .chat .chat-history .message:after {
+            bottom: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-bottom-color: #fff;
+            border-width: 10px;
+            margin-left: -10px
+        }
+
+        .chat .chat-history .my-message {
+            background: #efefef
+        }
+
+        .chat .chat-history .my-message:after {
+            bottom: 100%;
+            left: 23px;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-bottom-color: #efefef;
+            border-width: 10px;
+            margin-left: -10px
+        }
+
+        .chat .chat-history .other-message {
+            background: #e8f1f3;
+            text-align: right
+        }
+
+        .chat .chat-history .other-message:after {
+            border-bottom-color: #e8f1f3;
+            right: 13px
+        }
+
+        .chat .chat-message {
+            padding: 20px
+        }
+
+        .online,
+        .offline,
+        .me {
+            margin-right: 2px;
+            font-size: 8px;
+            vertical-align: middle
+        }
+
+        .online {
+            color: #86c541
+        }
+
+        .offline {
+            color: #e47297
+        }
+
+        .me {
+            color: #1d8ecd
+        }
+
+        .float-right {
+            float: right
+        }
+
+        .clearfix:after {
+            visibility: hidden;
+            display: block;
+            font-size: 0;
+            content: " ";
+            clear: both;
+            height: 0
+        }
+
+        @media only screen and (max-width: 767px) {
+            .chat-app .people-list {
+                height: 465px;
+                width: 100%;
+                overflow-x: auto;
+                background: #fff;
+                left: -400px;
+                display: none
+            }
+
+            .chat-app .people-list.open {
+                left: 0
+            }
+
+            .chat-app .chat {
+                margin: 0
+            }
+
+            .chat-app .chat .chat-header {
+                border-radius: 0.55rem 0.55rem 0 0
+            }
+
+            .chat-app .chat-history {
+                height: 300px;
+                overflow-x: auto
+            }
+        }
+
+        @media only screen and (min-width: 768px) and (max-width: 992px) {
+            .chat-app .chat-list {
+                height: 650px;
+                overflow-x: auto
+            }
+
+            .chat-app .chat-history {
+                height: 600px;
+                overflow-x: auto
+            }
+        }
+
+        @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+            .chat-app .chat-list {
+                height: 480px;
+                overflow-x: auto
+            }
+
+            .chat-app .chat-history {
+                height: calc(100vh - 350px);
+                overflow-x: auto
+            }
+        }
+
+        .message {
+            max-width: 85%;
+        }
+    </style>
+</head>
+
+<body class="cnt-home">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <!-- Main content -->
+    <div class="container" style="margin-top:15px">
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card chat-app">
+                    <div id="plist" class="people-list">
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Người nhắn</span>
+                            </div>
+                        </div>
+                        <ul class="list-unstyled chat-list mt-2 mb-0" id="list_room_">
+                            <li th:if="${roomChatResponse != null}" class="clearfix active" name="room"
+                                th:onclick="'activeRoom(' + ${roomChatResponse.roomId} + ')'"
+                                th:id="'room-' +  ${roomChatResponse.roomId}">
+                                <img th:src="${roomChatResponse.receiver.apiGetAvatar}" alt="avatar">
+                                <div class="about">
+                                    <div class="name">[[${roomChatResponse.receiver.fullName}]]</div>
+                                    <div class="status">[[${roomChatResponse.updatedDate}]] </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="chat">
+                        <div class="chat-header clearfix" style="height: 75px;">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <a data-toggle="modal" data-target="#view_info">
+                                        <img th:if="${roomChatResponse != null}"
+                                            th:src="${roomChatResponse.receiver.apiGetAvatar}" alt="avatar"
+                                            id="avatar_user_chat">
+                                        <img th:if="${roomChatResponse == null}" style="display: none;" alt="avatar"
+                                            id="avatar_user_chat">
+                                    </a>
+                                    <div class="chat-about">
+                                        <h5 class="m-b-0" id="name_user_chat"
+                                            th:text="${roomChatResponse != null} ? ${roomChatResponse.receiver.fullName} : ''">
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-history" style="overflow: auto; height: 380px; font-size: 13px;"
+                            id="chat_view_">
+                            <ul class="m-b-0" id="list_message_">
+                                <!-- <li class="clearfix">
+                                    <div class="message-data text-right">
+                                        <span class="message-data-time">10:10 AM, Today</span>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
+                                    </div>
+                                    <div class="message other-message float-right"> Hi Aiden, how are you? How is the
+                                        project coming along? </div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="message-data">
+                                        <span class="message-data-time">10:12 AM, Today</span>
+                                    </div>
+                                    <div class="message my-message">Are we meeting today?</div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="message-data">
+                                        <span class="message-data-time">10:15 AM, Today</span>
+                                    </div>
+                                    <div class="message my-message">Project has been already finished and I have results
+                                        to show you.</div>
+                                </li> -->
+                            </ul>
+                        </div>
+                        <form>
+                            <div class="chat-message clearfix">
+                                <div class="mb-0" style="display: flex;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-send"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="message"
+                                        placeholder="Nhập tin nhắn...">
+                                    <button id="send" type="submit">Gửi</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+
+    <!-- https://cdnjs.com/libraries/sockjs-client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <!-- https://cdnjs.com/libraries/stomp.js/ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script th:inline="javascript">
+
+        var origin = window.location.origin;
+        /*<![CDATA[*/
+        var my_user_id = /*[[${ myUserId }]]*/ 0;
+        var roomId = /*[[${ roomChatResponse != null ? roomChatResponse.roomId : -1 }]]*/ -1;
+        var sendToUsername = /*[[${ roomChatResponse != null ? roomChatResponse.receiver.username : ''}]]*/ '';
+        /*]]>*/
+
+        var stompClient = null;
+        var room = null;
+        var current_message = 0;
+        var old_total_message = 0;
+
+        var idTopOldMessage = '';
+
+        var clickLoadMore = false;
+
+        $(document).ready(function () {
+            getListRoom();
+            if (roomId != -1 && sendToUsername != '') {
+                getMessage();
+                setViewBottom();
+                connect();
+            }
+        });
+
+        function setViewBottom() {
+            document.getElementById('chat_view_').scrollTop = document.getElementById('chat_view_').scrollHeight;
+        }
+
+        function setViewToToOldMessage() {
+            document.getElementById('chat_view_').scrollTop = document.getElementById('message-' + idTopOldMessage).offsetTop - 150;
+        }
+
+        function getListRoom() {
+            $.ajax({
+                method: "GET",
+                url: origin + "/user/room-chat/list",
+                contentType: "application/json; charset=utf-8",
+            })
+                .done(function (data) {
+                    data.forEach(element => {
+                        if (element.roomId != roomId) {
+                            var li = document.createElement('li');
+                            li.classList.add("clearfix");
+                            li.setAttribute('id', 'room-' + element.roomId)
+                            li.setAttribute("name", "room");
+                            var img = document.createElement("img");
+                            img.setAttribute('src', element.receiver.apiGetAvatar);
+                            li.appendChild(img);
+                            var div = document.createElement('div');
+                            div.classList.add("about");
+                            var divName = document.createElement('div');
+                            divName.classList.add('name');
+                            divName.innerText = element.receiver.fullName;
+                            var divStatus = document.createElement('div');
+                            divStatus.classList.add('status');
+                            divStatus.innerText = element.updatedDate;
+                            div.appendChild(divName);
+                            div.appendChild(divStatus);
+                            li.appendChild(div)
+                            li.setAttribute("onclick", "activeRoom(" + element.roomId + ")");
+                            document.getElementById('list_room_').appendChild(li);
+                        }
+                    });
+
+                })
+                .fail(function () {
+                    toastr.error("Có lối xảy ra, vui lòng thử lại sau.");
+                })
+        }
+
+        function getMessage() {
+            $.ajax({
+                method: "GET",
+                url: origin + "/user/room-chat/get-message/" + roomId + "?currentMessage=" + current_message + "&oldTotalMessage=" + old_total_message,
+                contentType: "application/json; charset=utf-8",
+                async: false,
+            })
+                .done(function (data) {
+                    data.messageResponseList.forEach(element => {
+                        var li = document.createElement('li');
+                        li.classList.add("clearfix");
+                        li.setAttribute('id', "message-" + element.id)
+                        var div = document.createElement('div');
+                        div.classList.add('message-data')
+                        var span = document.createElement('span');
+                        span.classList.add('message-data-time');
+                        span.innerText = element.createdDate;
+                        var divMessage = document.createElement('div');
+                        divMessage.classList.add('message')
+                        divMessage.innerText = element.value;
+                        if (element.userSend.id != my_user_id) {
+                            div.classList.add('text-right');
+                            divMessage.classList.add('other-message');
+                            divMessage.classList.add('float-right');
+                        } else {
+                            divMessage.classList.add('my-message');
+                        }
+                        div.appendChild(span);
+                        li.appendChild(div);
+                        li.appendChild(divMessage);
+                        document.getElementById('list_message_').prepend(li);
+                    });
+                    if (data.messageResponseList.length > 0) {
+                        current_message = data.currentMessage;
+                        old_total_message = data.oldTotalMessage;
+                        if (document.getElementById('load_more_') != null) {
+                            document.getElementById('load_more_').remove();
+                        }
+                        var li = document.createElement('li');
+                        li.classList.add("clearfix");
+                        li.setAttribute('id', 'load_more_');
+                        li.style.display = "flex";
+                        li.style.justifyContent = "center";
+                        li.innerHTML = '<i class="fa-solid fa-arrow-up" style="font-size: 20px; cursor: pointer;"></i>';
+                        li.setAttribute('onclick', 'loadMoreMessage()')
+                        document.getElementById('list_message_').prepend(li);
+                    }
+                    if (!clickLoadMore) {
+                        setViewBottom();
+
+                    }
+                    else {
+                        setViewToToOldMessage();
+                    }
+                    if (data.messageResponseList.length > 0) {
+                        idTopOldMessage = data.messageResponseList.slice(-1)[0].id;
+                    }
+
+                })
+                .fail(function (error) {
+                    if (error.responseText == 'Không còn tin nhắn !!!') {
+                        document.getElementById('load_more_').remove();
+                        var li = document.createElement('li');
+                        li.classList.add("clearfix");
+                        li.setAttribute('id', 'load_more_');
+                        li.style.display = "flex";
+                        li.style.justifyContent = "center";
+                        li.innerHTML = 'Đã hết tin nhắn !';
+                        document.getElementById('list_message_').prepend(li);
+                    } else {
+                        toastr.error("Có lối xảy ra, vui lòng thử lại sau.");
+                    }
+                })
+        }
+
+        function loadMoreMessage() {
+            clickLoadMore = true;
+            getMessage();
+            clickLoadMore = false;
+        }
+
+        function activeRoom(roomIdActive) {
+            var listRoom = document.getElementsByName("room");
+            current_message = 0;
+            old_total_message = 0;
+            listRoom.forEach(element => {
+                if (element.getAttribute("class").includes("active")) {
+                    element.classList.remove("active");
+                }
+            })
+
+            document.getElementById('room-' + roomIdActive).classList.add('active');
+
+            $.ajax({
+                method: "GET",
+                url: origin + "/user/room-chat/get-room-by-room_id?id=" + roomIdActive,
+                contentType: "application/json; charset=utf-8",
+            })
+                .done(function (data) {
+                    document.getElementById('avatar_user_chat').setAttribute('src', data.receiver.apiGetAvatar);
+                    document.getElementById('avatar_user_chat').style.display = "block";
+                    document.getElementById('name_user_chat').innerText = data.receiver.fullName;
+                    roomId = data.roomId;
+                    sendToUsername = data.receiver.username;
+                    document.getElementById('list_message_').innerHTML = '';
+                    getMessage();
+                    disconnect();
+                    connect();
+                })
+                .fail(function () {
+                    toastr.error("Có lối xảy ra, vui lòng thử lại sau.");
+                })
+            //setViewBottom();
+        }
+
+
+        function connect(username) {
+            var socket = new SockJS('/server');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function () {
+                console.log('Web Socket is connected');
+                room = stompClient.subscribe('/room/topic/' + roomId, function (message) {
+                    onMessageReceiver(message.body)
+                });
+            });
+        }
+
+        function disconnect() {
+            if (room != null) {
+                room.unsubscribe();
+            }
+        }
+
+        function onMessageReceiver(text) {
+            var li = document.createElement('li');
+            li.classList.add("clearfix");
+            var div = document.createElement('div');
+            div.classList.add('message-data')
+            var span = document.createElement('span');
+            span.classList.add('message-data-time');
+            var timeNow = new Date();
+            span.innerText = timeNow.getHours() + ":" + timeNow.getMinutes();
+            var divMessage = document.createElement('div');
+            divMessage.classList.add('message')
+            divMessage.innerText = text;
+            divMessage.classList.add('my-message');
+            div.appendChild(span);
+            li.appendChild(div);
+            li.appendChild(divMessage);
+            document.getElementById('list_message_').appendChild(li);
+            setViewBottom();
+        }
+
+        $(function () {
+            $("form").on('submit', function (e) {
+                e.preventDefault();
+            });
+            $("#connect").click(function () {
+                connect($("#username").val());
+            });
+            $("#disconnect").click(function () {
+                disconnect();
+            })
+            $("#send").click(function () {
+                if ($("#message").val().length > 255) {
+                    toastr.warning("Không thể gửi quá 255 ký tự.");
+                    return;
+                }
+                var data = {
+                    roomId: roomId,
+                    username: sendToUsername,
+                    value: $("#message").val()
+                }
+                stompClient.send("/app/server", {}, JSON.stringify(data));
+                var li = document.createElement('li');
+                li.classList.add("clearfix");
+                var div = document.createElement('div');
+                div.classList.add('message-data')
+                var span = document.createElement('span');
+                span.classList.add('message-data-time');
+                var timeNow = new Date();
+                span.innerText = timeNow.getHours() + ":" + timeNow.getMinutes();
+                var divMessage = document.createElement('div');
+                divMessage.classList.add('message');
+                divMessage.innerText = document.getElementById('message').value;
+                div.classList.add('text-right');
+                divMessage.classList.add('other-message');
+                divMessage.classList.add('float-right');
+                div.appendChild(span);
+                li.appendChild(div);
+                li.appendChild(divMessage);
+                document.getElementById('list_message_').appendChild(li);
+                document.getElementById('message').value = '';
+                setViewBottom();
+            });
+        });
+    </script>
+</body>
+
+</html>

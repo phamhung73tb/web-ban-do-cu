@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách slide</title>
+    <div th:replace="fragment::head-custom"></div>
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="padding-top: 13px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-10">
+                        
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="float-sm-right">
+                            <a class="btn btn-dark" th:href="@{/admin/slide/create}">
+                                <i class="fa-solid fa-square-plus"></i> Thêm mới
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <!-- Default box -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách slide</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%">
+                                        #
+                                    </th>
+                                    <th style="width: 20%">
+                                        Tiêu đề 1
+                                    </th>
+                                    <th style="width: 21%">
+                                        Tiêu đề 2
+                                    </th>
+                                    <th style="width: 30%">
+                                        Link
+                                    </th>
+                                    <th style="width: 10%">
+                                        Ẩn
+                                    </th>
+                                    <th style="width: 17%">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="slide : ${slideResponseList}">
+                                    <tr>
+                                        <td>
+                                            [[${slide.id}]]
+                                        </td>
+                                        <td>
+                                            [[${slide.title}]]
+                                        </td>
+                                        <td>
+                                            [[${slide.titleStrong}]]
+                                        </td>
+                                        <td>
+                                            [[${slide.link}]]
+                                        </td>
+                                        <td>
+                                            <input th:if="${slide.status}" type="checkbox" th:data-id="${slide.id}"
+                                                onclick="changeStatus(this)" checked>
+                                            <input th:unless="${slide.status}" th:data-id="${slide.id}"
+                                                onclick="changeStatus(this)" type="checkbox">
+                                        </td>
+                                        <td class="project-actions text-right">
+                                            <a class="btn btn-info btn-sm"
+                                                th:href="@{'/admin/slide/edit/' + ${slide.id}}">
+                                                <i class="fas fa-pencil-alt">
+                                                </i>
+                                                Sửa
+                                            </a>
+                                            <a class="btn btn-danger btn-sm"
+                                                th:data-href="'/admin/slide/delete/' + ${slide.id}"
+                                                onclick="deleteMethod(this)">
+                                                <i class="fas fa-trash">
+                                                </i>
+                                                Xóa
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+        <!-- /.content -->
+        <!-- /.content-wrapper -->
+
+        <!-- paginate -->
+        <div th:replace="fragment::paginate('/admin/slide/get-all', ${keyword}, ${current_page}, ${total_page})"></div>
+    </div>
+
+    <!-- <div th:replace="fragment::footer-admin"></div> -->
+
+    <div th:replace="fragment::script-custom"></div>
+    <script>
+        var origin = window.location.origin;
+        function changeStatus(e) {
+            var slideId = $(e).attr('data-id');
+            $.ajax({
+                method: "POST",
+                url: origin + "/admin/slide/update-status/" + slideId,
+            }).done(function () {
+                toastr.success("Đổi trạng thái ẩn/hiện thành công.")
+            }).fail(function () {
+                toastr.error("Có lỗi xảy ra.")
+            })
+        }
+    </script>
+
+</body>
+
+</html>

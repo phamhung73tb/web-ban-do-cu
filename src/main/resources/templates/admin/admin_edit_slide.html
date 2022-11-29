@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa slide</title>
+    <div th:replace="fragment::head-custom"></div>
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="min-height: 1599.06px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-12">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/slide/get-all}">Quản lý slide</a></li>
+                    <li class="breadcrumb-item active">[[${slideResponse.title}]]</li>
+                  </ol>
+                </div>
+              </div>
+            </div><!-- /.container-fluid -->
+          </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6" style="    flex: 0 0 100%; max-width: 100%;">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">Sửa slide</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form th:action="@{'/admin/slide/edit/'+${slideResponse.id}}" method="post" th:object="${slideRequest}"
+                                enctype="multipart/form-data" id="formCreateSlide" >
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Tiêu đề</label>
+                                        <input type="text" class="form-control" th:id="title"
+                                            placeholder="Tiêu đề" th:name="title" th:value="${slideResponse.title}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tiêu đề nhấn mạnh</label>
+                                        <input type="text" class="form-control" th:id="titleStrong"
+                                            placeholder="Tiêu đề ..." th:name="titleStrong" th:value="${slideResponse.titleStrong}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Link </label>
+                                        <input type="text" class="form-control" th:id="link"
+                                            placeholder="link" th:name="link" th:value="${slideResponse.link}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fileImage" class="btn btn-success"><i class="fa-solid fa-upload"></i> Chọn ảnh</label>
+                                        <input id="fileImage" th:name="image" type="file"
+                                            accept="image/png, image/jpg, image/jpeg" style="display: none;">
+                                        <img id="thumbnail" alt="image preview" width="200px" style="display: block;" th:src="${slideResponse.apiGetImage}"/>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Lưu</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!--/.col (left) -->
+                    <!--/.col (right) -->
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+
+    <div th:replace="fragment::footer-admin"></div>
+
+    <div th:replace="fragment::script-custom"></div>
+
+    <script>
+        var origin = window.location.origin;
+
+        $(document).ready(function () {
+            $('#fileImage').change(function () {
+                showImageThumbnail(this);
+            });
+
+        });
+
+
+        function showImageThumbnail(fileInput) {
+            file = fileInput.files[0];
+            reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#thumbnail').attr('src', e.target.result);
+                document.getElementById('thumbnail').style.display = "block";
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+    </script>
+
+</body>
+
+</html>

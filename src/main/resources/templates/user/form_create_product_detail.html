@@ -1,0 +1,64 @@
+<form class="register-form outer-top-xs" role="form" xmlns:th="https://www.thymeleaf.org" th:object="${productRequest}"
+    id="formDetailProduct">
+    <th:block th:each="property : ${productRequest.productPropertyRequestList}">
+        <div class="form-group">
+            <label class="info-title" th:text="${property.name}">Lỗi</label>
+            <input type="text" class="form-control unicase-form-control text-input" th:name="property"
+                th:id="${property.propertyId}" th:placeholder="${property.note}">
+        </div>
+    </th:block>
+    <div class="form-group">
+        <label class="info-title">Tiêu đề - Tên sản phẩm</label>
+        <input type="text" class="form-control unicase-form-control text-input" placeholder="Tiêu đề hiển thị" required id="name_" name="name_">
+    </div>
+    <div class="form-group">
+        <label class="info-title">Giá</label>
+        <input type="text" class="form-control unicase-form-control text-input" placeholder="Đơn vị VNĐ" required
+            id="price_" name="price_">
+    </div>
+    <div class="form-group">
+        <label class="info-title">Tình trạng</label>
+        <select id="currentStatus_" class="form-control unicase-form-control text-input" required>
+            <option>Mới</option>
+            <option>Đã qua sử dụng (chưa sửa chữa)</option>
+            <option>Đã qua sử dụng (đã sửa chữa)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="info-title">Thông tin chi tiết</label>
+        <textarea type="" class="form-control unicase-form-control text-input" style="height: 145px;" id="description_"
+            placeholder="
+        - Tình trạng sản phẩm
+        - Thời gian sử dụng
+        - Bảo hành nếu có
+        - Sửa chữa, nâng cấp, phụ kiện đi kèm
+        - Địa chỉ giao nhận, đổi trả"></textarea>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 50px;">
+        <label class="info-title">Địa chỉ:</label>
+        <div>
+            <div class="col-sm-4">
+                <select id="province" class="form-control" onchange="loadDistrict()" name="select_province">
+                    <option hidden value="0">---Chọn tỉnh, thành phố---</option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <select id="district" class="form-control" onchange="loadCommune()" name="select_district">
+                    <option hidden value="0">---Chọn quận, huyện---</option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <select id="commune" class="form-control" name="select_commune">
+                    <option hidden value="0">---Chọn xã, phường, trị trấn---</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="info-title">Địa chỉ cụ thể</label>
+        <input type="text" class="form-control unicase-form-control text-input" required id="detail_" placeholder="Số nhà, tên đường, ..." name="detail_">
+    </div>
+
+    <a class=" btn-upper btn btn-primary checkout-page-button" onclick="createProduct()">Đăng tin</a>
+</form>

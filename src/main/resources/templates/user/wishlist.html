@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Danh sách yêu thích</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+    .sidebar .side-menu nav .nav>li {
+      -moz-border-bottom-colors: none;
+      -moz-border-left-colors: none;
+      -moz-border-right-colors: none;
+      -moz-border-top-colors: none;
+      -webkit-transition: none;
+      -moz-transition: none;
+      -o-transition: none;
+      transition: none;
+      position: relative;
+      width: 100%;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    li.menu-hover_:hover {
+      background-color: rgb(235, 235, 235);
+    }
+
+    .menu-hover_:hover>.dropdown-menu {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="cnt-home">
+<div th:replace="fragment::header-user"></div>
+<!-- ============================================== HEADER : END ============================================== -->
+<div class="body-content outer-top-xs" id="top-banner-and-menu">
+    <div class="breadcrumb" style="font-size: 13px;">
+        <div class="container">
+            <div class="breadcrumb-inner">
+                <ul class="list-inline list-unstyled">
+                    <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                    <li class="active">Danh sách yêu thích</li>
+                </ul>
+            </div><!-- /.breadcrumb-inner -->
+        </div><!-- /.container -->
+    </div>
+    <div class="container">
+        <div class="row">
+            <!-- /.sidebar -->
+            <div class="col-md-12">
+                <!-- ========================================== SECTION – HERO ========================================= -->
+                <div class="clearfix filters-container m-t-10">
+                    <div class="row">
+                        <div class="col col-sm-12 col-md-12 text-right">
+                            <div class="pagination-container">
+                                <ul class="list-inline list-unstyled">
+                                    <li th:if="${current_page > 1}" class="prev"><a
+                                            th:href="@{'/user/get-wishlist?page=' + ${current_page - 1}}"><i
+                                                class="fa fa-angle-left"></i></a></li>
+                                    <li th:unless="${current_page > 1}" class="prev"><a><i class="fa fa-angle-left"></i></a>
+                                    </li>
+                                    <th:block th:if="${total_page != 0}" th:each="i: ${#numbers.sequence(1, total_page)}">
+                                        <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
+                                        <li th:unless="${i == current_page}"><a
+                                                th:href="@{'/user/get-wishlist?page=' + ${i}}">[[${i}]]</a>
+                                        </li>
+                                    </th:block>
+                                    <li th:if="${total_page > current_page}" class="next"><a
+                                            th:href="@{'/user/get-wishlist?page=' + ${current_page + 1}}"><i
+                                                class="fa fa-angle-right"></i></a></li>
+                                    <li th:unless="${total_page > current_page}" class="next"><a><i
+                                                class="fa fa-angle-right"></i></a></li>
+                                </ul><!-- /.list-inline -->
+                            </div>
+                            <!-- /.pagination-container -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <div class="search-result-container ">
+                    <div id="myTabContent" class="tab-content category-list">
+                        <div class="tab-pane active" id="list-container">
+                            <div class="category-product">
+                                <th:block th:each="product : ${productResponseList}">
+                                    <div class="category-product-inner wow fadeInUp animated" style="visibility: visible;" th:id="'product-' + ${product.id}">
+                                        <div class="products">
+                                            <div class="product-list product">
+                                                <div class="row product-list-row">
+                                                    <div class="col col-sm-4 col-lg-4">
+                                                        <div>
+                                                            <div> <img th:src="${product.mainImage}" alt="" style="margin-left: 50%;
+                                                                transform: translate(-50%, 0); object-fit: contain; width: 150px; height: 150px;"> </div>
+                                                        </div>
+                                                        <!-- /.product-image -->
+                                                    </div>
+                                                    <!-- /.col -->
+                                                    <div class="col col-sm-8 col-lg-8">
+                                                        <div class="product-info">
+                                                            <h3 class="name"><a th:href="@{'/user/product/detail/' + ${product.id}}">[[${product.name}]]</a></h3>
+                                                            <div class="product-price"> <span class="price">  [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ </span></div>
+                                                            <!-- /.product-price -->
+                                                            <!-- /.cart -->
+
+                                                        </div>
+                                                        <!-- /.product-info -->
+                                                    </div>
+                                                    <!-- /.col -->
+                                                </div>
+                                                <!-- /.product-list-row -->
+                                                <div class="tag" th:data-id="${product.id}" onclick="removeProduct(this)"><i class="fa-solid fa-xmark" style="color: red; font-size: 18px; cursor: pointer;"></i></div>
+                                            </div>
+                                            <!-- /.product-list -->
+                                        </div>
+                                        <!-- /.products -->
+                                    </div>
+                                </th:block>
+                                <!-- /.category-product-inner -->
+                            </div>
+                            <!-- /.category-product -->
+                        </div>
+                        <!-- /.tab-pane #list-container -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+                <!-- /.search-result-container -->
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /#top-banner-and-menu -->
+<div th:replace="fragment::footer-user"></div>
+
+<div th:replace="fragment::script-custom2"></div>
+
+<script>
+    var origin = window.location.origin;
+
+    $(document).ready(function () {
+      $.ajax({
+        method: "GET",
+        url: origin + "/get-menu",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          document.getElementById("menu_").innerHTML = data;
+        }
+      })
+    });
+
+    function removeProduct(e){
+        $.ajax({
+        method: "POST",
+        url: origin + "/user/remove-wishlist/" + $(e).attr('data-id'),
+        contentType: "application/json; charset=utf-8",
+      }).done(function(){
+        document.getElementById('product-'+ $(e).attr('data-id')).remove();
+        toastr.success("Loại bỏ sản phẩm thành công.");
+      }).fail(function(){
+        toastr.error("Có lỗi xảy ra.");
+      })
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<ul class="nav" xmlns:th="https://www.thymeleaf.org">
+    <th:block th:each="category: ${menuResponse}">
+        <li class="dropdown menu-item menu-hover_"> <a th:href="@{'/category/' + ${category.key.slug}}" class="dropdown-toggle"
+                ><i class="icon fa fa-shopping-bag" aria-hidden="true"></i><span style="font-size: 13px;"
+                    th:text="${category.key.name} ?: _">Lỗi</span></a>
+            <ul class="dropdown-menu mega-menu">
+                <li class="yamm-content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <ul class="links list-unstyled">
+                                <th:block th:each="childCategory: ${category.value}">
+                                    <li><a th:href="@{'/category/' + ${childCategory.slug}}"><span
+                                                th:text="${childCategory.name} ?: _">Lỗi</span></a></li>
+                                </th:block>
+                            </ul>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </li>
+                <!-- /.yamm-content -->
+            </ul>
+            <!-- /.dropdown-menu -->
+        </li>
+        <!-- /.menu-item -->
+    </th:block>
+</ul>

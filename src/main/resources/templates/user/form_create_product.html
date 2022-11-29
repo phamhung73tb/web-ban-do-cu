@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng tin</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <!-- <div th:replace="fragment::head-custom"></div> -->
+    <style>
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 50%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes animatezoom {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+        .hhh_:after {
+            color: #bababa;
+            content: "\f105";
+            float: right;
+            font-size: 12px;
+            height: 20px;
+            line-height: 18px;
+            -webkit-transition: all 0.3s ease 0s;
+            -moz-transition: all 0.3s ease 0s;
+            -o-transition: all 0.3s ease 0s;
+            transition: all 0.3s ease 0s;
+            width: 10px;
+            font-family: FontAwesome;
+        }
+
+        .item-image_ {
+            position: relative;
+        }
+
+        .item-image_ img {
+            display: block;
+        }
+
+        .item-image_ .fa-circle-xmark {
+            position: absolute;
+            top: -5px;
+            right: 0px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        div#optionCategoryName:after {
+            content: '\f107';
+            font-family: FontAwesome;
+            font-weight: normal;
+            float: right;
+            font-style: normal;
+            margin: 0px 0px 0px 10px;
+            text-decoration: none;
+        }
+
+        span.error.invalid-feedback {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body class="cnt-home" style="font-family: 'Open Sans', sans-serif; font-size: 13px;">
+    <div th:replace="fragment::header-user"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="padding-top: 13px; margin-left: 0px">
+        <div class="breadcrumb">
+            <div class="container">
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li class="active">Đăng tin</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+        </div>
+        <!-- Main content -->
+        <div class="body-content outer-top-xs" id="top-banner-and-menu">
+            <div class="container">
+                <!-- /.col -->
+                <div class="track-order-page">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <!-- Profile Image -->
+                            <div class="card card-outline">
+                                <div class="card-body box-profile">
+                                    <div class="text-center">
+                                        <label for="fileImage" style="font-size: 20px;" title="Thêm tối đa 10 ảnh"><i
+                                                class="fa-solid fa-images"></i></label>
+                                        <input id="fileImage" name="files[]" type="file"
+                                            accept="image/png, image/jpg, image/jpeg" style="display: none;"
+                                            onchange="addImage(this)" required>
+                                        <!-- <img id="thumbnail" alt="image preview" width="200px"/> -->
+                                    </div>
+                                    <div id="container-image_">
+
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <div class="col-md-9">
+                            <h2 class="heading-title" style="font-size: 15px;">Thông tin sản phẩm</h2>
+                            <div class="form-group">
+                                <label class="info-title">Loại sản phẩm</label>
+                                <div class="form-control unicase-form-control"
+                                    onclick="document.getElementById('id01').style.display = 'block';"
+                                    id="category_name">
+                                    <div id="optionCategoryName">----Chọn loại sản phẩm----</div>
+                                </div>
+                            </div>
+                            <div id="form-content_">
+
+                            </div>
+                        </div>
+                    </div><!-- /.row -->
+                </div>
+                <!-- /.col -->
+            </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+
+
+    <div id="id01" class="modal" style="z-index: 99999;">
+        <div class="modal-content" id="id02">
+
+        </div>
+    </div>
+
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+    <!-- <div th:replace="fragment::script-custom"></div> -->
+    <!-- jquery-validation -->
+    <script th:src="@{/assets/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
+
+    <script th:inline="javascript">
+
+        var origin = window.location.origin;
+
+        // Get the modal
+        var modal = document.getElementById('id01');
+
+
+        $(document).ready(function () {
+            document.getElementById('id01').style.display = 'block';
+
+            $.ajax({
+                method: "GET",
+                url: origin + "/get-menu2",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    document.getElementById("id02").innerHTML = data;
+                }
+            })
+
+            $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                return arg !== value;
+            }, "Value must not equal arg.");
+        });
+
+        var index = 0;
+        var listFile = [];
+
+        function addImage(element) {
+            if (listFile.length >= 10) {
+                toastr.warning("Thêm được tối đa 10 ảnh.");
+                return;
+            }
+            var file = element.files[0];
+            if (((file.size / 1024) / 1024).toFixed(4) > 10) {
+                toastr.warning("Chỉ có thể thêm ảnh dưới 10MB.");
+                return;
+            }
+            var container = document.getElementById("container-image_");
+            var item = document.createElement('div');
+            item.setAttribute("class", "item-image_")
+            item.style.marginLeft = "50%";
+            item.style.transform = "translate(-50%)";
+            item.style.marginBottom = "10px";
+
+            var thumbnail = document.createElement('img');
+            thumbnail.setAttribute("width", "100px");
+            thumbnail.setAttribute("name", "img-product");
+            thumbnail.setAttribute("class", "icon-remove");
+            thumbnail.style.marginLeft = "50%";
+            thumbnail.style.transform = "translate(-50%)";
+
+            var fileAndIndex = {
+                "parentIndex": index,
+                "file": file
+            };
+            listFile.push(fileAndIndex);
+
+
+            reader = new FileReader();
+            reader.onload = function (e) {
+                thumbnail.setAttribute('src', e.target.result);
+                thumbnail.style.display = "block";
+            }
+
+            reader.readAsDataURL(file);
+
+            item.appendChild(thumbnail);
+            var icon = document.createElement('i');
+            icon.setAttribute("class", "fa-solid fa-circle-xmark");
+            icon.onclick = function () {
+                var parentIndex = this.parentElement.getAttribute('data-id');
+                for (var i = 0; i < listFile.length; i++) {
+
+                    if (listFile[i].parentIndex == parentIndex) {
+
+                        listFile.splice(i, 1);
+                    }
+
+                }
+                this.parentElement.remove();
+            };
+            item.appendChild(icon);
+            item.setAttribute("data-id", index);
+            container.appendChild(item);
+            index++;
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function showChild(e) {
+            var list = document.getElementById($(e).attr('data-id')).innerHTML;
+            document.getElementById('id002').innerHTML = list;
+        }
+
+        function showParent() {
+            document.getElementById('id002').innerHTML = document.getElementById('id003').innerHTML;
+        }
+
+        var categoryId = 0;
+        function getFormCreateProduct(e) {
+            categoryId = $(e).attr('data-category-id');
+            document.getElementById("optionCategoryName").innerText = $(e).attr('data-category-name');
+            document.getElementById('id002').innerHTML = document.getElementById('id003').innerHTML;
+            modal.style.display = "none";
+
+            $.ajax({
+                method: "GET",
+                url: origin + "/user/product/get-form/" + categoryId,
+                contentType: "application/json; charset=utf-8",
+                async: false,
+            }).done(function (data) {
+                document.getElementById("form-content_").innerHTML = data;
+                $('#price_').on('keyup', function () {
+                    updateTextView($(this));
+                });
+
+            });
+            modal.style.display = "none";
+            loadProvince();
+
+            $(function () {
+                $('#formDetailProduct').validate({
+                    rules: {
+                        "name_": {
+                            required: true,
+                        },
+                        "price_": {
+                            required: true,
+                        },
+                        "detail_": {
+                            required: true,
+                        },
+                        "property": {
+                            required: true,
+                        },
+                        "select_province": {
+                            valueNotEquals: "0"
+                        },
+                        "select_district": {
+                            valueNotEquals: "0"
+                        },
+                        "select_commune": {
+                            valueNotEquals: "0"
+                        },
+                    },
+                    messages: {
+                        "name_": {
+                            required: "Hãy nhập tiêu đề cho bài đăng !",
+                        },
+                        "price_": {
+                            required: "Hãy nhập giá sản phẩm !",
+                        },
+                        "detail_": {
+                            required: "Hãy nhập địa chỉ cụ thể !",
+                        },
+                        "property": {
+                            required: "Hãy điền thông tin sản phẩm !",
+                        },
+                        "select_province": {
+                            valueNotEquals: "Hãy chọn tỉnh thành phố!",
+                        },
+                        "select_district": {
+                            valueNotEquals: "Hãy chọn quận huyện !",
+                        },
+                        "select_commune": {
+                            valueNotEquals: "Hãy chọn xã phường !",
+                        },
+                    },
+                    errorElement: 'span',
+                    errorPlacement: function (error, element) {
+                        error.addClass('invalid-feedback');
+                        element.closest('.form-group').append(error);
+                    },
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).addClass('is-invalid');
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).removeClass('is-invalid');
+                    }
+                });
+            });
+        }
+
+        function updateTextView(_obj) {
+            var num = getNumber(_obj.val());
+            if (num == 0) {
+                _obj.val('');
+            } else {
+                _obj.val(num.toLocaleString());
+            }
+        }
+        function getNumber(_str) {
+            var arr = _str.split('');
+            var out = new Array();
+            for (var cnt = 0; cnt < arr.length; cnt++) {
+                if (isNaN(arr[cnt]) == false) {
+                    out.push(arr[cnt]);
+                }
+            }
+            return Number(out.join(''));
+        }
+
+        function createProduct() {
+            if (listFile.length == 0) {
+                toastr.warning("Hãy thêm ít nhất 1 ảnh cho sản phẩm.");
+                return;
+            }
+
+            if (!$('#formDetailProduct').valid()) {
+                toastr.warning("Hãy điền đầy đủ thông tin sản phẩm.");
+                return;
+            }
+
+            var listProperty = document.getElementsByName('property');
+
+            var productPropertyRequestList = [];
+
+            listProperty.forEach(property => {
+                var productPropertyRequest =
+                {
+                    "propertyId": property.getAttribute('id'),
+                    "value": property.value,
+                };
+
+                productPropertyRequestList.push(productPropertyRequest);
+            });
+
+            var name = document.getElementById("name_").value;
+            var price = getNumber(document.getElementById("price_").value);
+            var currentStatus = document.getElementById("currentStatus_").value;
+            var description = document.getElementById("description_").value;
+
+            var province = $("#province option:selected").text().trim();
+            var codeProvince = $("#province option:selected").val();
+            var district = $("#district option:selected").text().trim();
+            var codeDistrict = $("#district option:selected").val();
+            var commune = $("#commune option:selected").text().trim();
+            var codeCommune = $("#commune option:selected").val();
+            var detail = document.getElementById("detail_").value;
+
+            var addressRequest = {
+                "province": province,
+                "codeProvince": codeProvince,
+                "district": district,
+                "codeDistrict": codeDistrict,
+                "commune": commune,
+                "codeCommune": codeCommune,
+                "detail": detail
+            }
+
+            var data = {
+                "name": name,
+                "price": price,
+                "currentStatus": currentStatus,
+                "description": description,
+                "productPropertyRequestList": productPropertyRequestList,
+                "categoryId": categoryId,
+                "addressRequest": addressRequest,
+            }
+
+            var productId = 0;
+            $.ajax({
+                method: 'POST',
+                url: origin + "/user/product/create",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+            })
+                .done(function (data) {
+                    productId = data;
+                })
+                .fail(function () {
+                    toastr.error("Có lối xảy ra, vui lòng thử lại sau.");
+                });
+
+            var dataFile = new FormData();
+
+            listFile.forEach(item => {
+                dataFile.append("images", item.file);
+            })
+
+            $.ajax({
+                method: 'POST',
+                url: origin + "/user/product/upload-image-product/" + productId,
+                data: dataFile,
+                contentType: false,
+                processData: false,
+            })
+                .done(function () {
+                    toastr.success("Đăng tin thành công.");
+                    location.href = origin + "/user/my-list-product";
+                })
+                .fail(function () {
+                    toastr.error("Không thẻ upload ảnh, vui lòng thử lại sau.");
+                });
+
+        }
+
+        function loadProvince() {
+            var listDistrict = document.getElementById("district");
+            listDistrict.value = "0";
+            var listCommune = document.getElementById("commune");
+            listCommune.value = "0";
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/?depth=1",
+            })
+                .done(function (data) {
+                    var listProvince = document.getElementById("province");
+                    data.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listProvince.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadDistrict() {
+            var listCommune = document.getElementById("commune");
+            listCommune.value = "0";
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/p/" + $('#province')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listDistrict = document.getElementById("district");
+                    $('#district').empty();
+                    listDistrict.innerHTML = "<option hidden value='0'>---Chọn quận, huyện---</option>";
+                    data.districts.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listDistrict.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadCommune() {
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/d/" + $('#district')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listCommune = document.getElementById("commune");
+                    $('#commune').empty();
+                    listCommune.innerHTML = "<option hidden value='0'>---Chọn xã, phường, trị trấn---</option>";
+                    data.wards.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listCommune.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+    </script>
+</body>
+
+</html>

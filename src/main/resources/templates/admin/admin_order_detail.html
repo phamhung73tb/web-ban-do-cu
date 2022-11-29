@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin đơn hàng</title>
+    <div th:replace="fragment::head-custom"></div>
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="padding-top: 13px;">
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-12">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/order/get-all}">Quản lý đơn hàng</a></li>
+                    <li class="breadcrumb-item active">#[[${orderResponse.id}]]</li>
+                  </ol>
+                </div>
+              </div>
+            </div><!-- /.container-fluid -->
+          </section>
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Thông tin đơn hàng</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+                            <div class="row">
+                                <div class="col-12">
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="info-title">Mã đơn hàng
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                placeholder="" th:value="${orderResponse.id}" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="info-title">Trạng thái
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                placeholder="" th:value="${orderResponse.status}" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="info-title">Ngày đặt
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                placeholder="" th:value="${orderResponse.createTime}" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="info-title">Người bán
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                id="full_name" placeholder=""
+                                                th:value="${orderResponse.productResponse.sellerName}" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="info-title">Số điện
+                                                thoại
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                id="cellphone" placeholder=""
+                                                th:value="${orderResponse.productResponse.sellerPhone}" disabled>
+                                        </div>
+                                        <div class="form-group" style="margin-top: 15px">
+                                            <label class="info-title">Địa chỉ bán
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                required id="detail_"
+                                                th:value="${orderResponse.productResponse.addressResponse.detail} 
+                                                            + ', ' + ${orderResponse.productResponse.addressResponse.commune} 
+                                                            + ', ' + ${orderResponse.productResponse.addressResponse.district} 
+                                                            + ', ' + ${orderResponse.productResponse.addressResponse.province}" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="info-title">Người mua
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                placeholder=""
+                                                th:value="${orderResponse.deliveryAddressResponse.fullName}" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="info-title">Số điện
+                                                thoại
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                placeholder=""
+                                                th:value="${orderResponse.deliveryAddressResponse.cellphone}" disabled>
+                                        </div>
+                                        <div class="form-group" style="margin-top: 15px">
+                                            <label class="info-title">Địa chỉ giao
+                                            </label>
+                                            <input type="text" class="form-control unicase-form-control text-input"
+                                                required th:value="${orderResponse.deliveryAddressResponse.detail}
+                                                            + ', ' + ${orderResponse.deliveryAddressResponse.commune} 
+                                                            + ', ' + ${orderResponse.deliveryAddressResponse.district} 
+                                                            + ', ' + ${orderResponse.deliveryAddressResponse.province}"
+                                                disabled>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+                            <h4 class="checkout-subtitle">Sản phẩm</h4>
+                            <div id="myTabContent" class="tab-content category-list">
+                                <div class="tab-pane active" id="list-container">
+                                    <div class="category-product">
+                                        <div class="category-product-inner wow fadeInUp animated"
+                                            style="visibility: visible;"
+                                            th:id="'product-' + ${orderResponse.productResponse.id}">
+                                            <div class="products">
+                                                <div class="product-list product">
+                                                    <div class="row product-list-row">
+                                                        <div class="col col-sm-4 col-lg-4">
+                                                            <div>
+                                                                <div> <img
+                                                                        th:src="${orderResponse.productResponse.mainImage}"
+                                                                        alt=""
+                                                                        style="margin-left: 50%;
+                                                                                        transform: translate(-50%, 0); object-fit: contain; width: 80px; height: 80px;">
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.product-image -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                        <div class="col col-sm-8 col-lg-8"
+                                                            style="padding-bottom: 20px;">
+                                                            <div class="product-info">
+                                                                <h5 class="name">
+                                                                    <a style="text-decoration: none;">[[${orderResponse.productResponse.name}]]
+                                                                    </a>
+                                                                </h5>
+                                                            </div>
+                                                            <!-- /.product-info -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                    </div>
+                                                    <!-- /.product-list-row -->
+                                                    <!-- <div class="tag new"><span>new</span></div> -->
+                                                </div>
+                                                <!-- /.product-list -->
+                                            </div>
+                                            <!-- /.products -->
+                                        </div>
+                                        <!-- /.category-product-inner -->
+                                    </div>
+                                    <!-- /.category-product -->
+                                </div>
+                                <!-- /.tab-pane #list-container -->
+                            </div>
+                            <br>
+                            <br>
+                            <h5 class="checkout-subtitle">Sản phẩm:
+                                [[${#numbers.formatDecimal(orderResponse.priceProduct, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                            </h5>
+                            <h5 class="checkout-subtitle">Phí giao hàng:
+                                [[${#numbers.formatDecimal(orderResponse.feeShipping, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                                </h5>
+                            <h5 class="checkout-subtitle">Tổng tiền thanh toán:
+                                [[${#numbers.formatDecimal(orderResponse.priceProduct + orderResponse.feeShipping, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                            </h5>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+        </section>
+    </div>
+
+    <div th:replace="fragment::footer-admin"></div>
+
+    <div th:replace="fragment::script-custom"></div>
+</body>
+
+</html>

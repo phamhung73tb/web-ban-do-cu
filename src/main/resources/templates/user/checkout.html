@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Thanh toán</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+    </style>
+</head>
+
+<body class="cnt-home">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs" id="top-banner-and-menu">
+        <div class="container">
+            <div class="checkout-box ">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-group checkout-steps" id="accordion">
+                            <!-- checkout-step-01  -->
+                            <div class="panel panel-default checkout-step-01">
+
+                                <!-- panel-heading -->
+                                <div class="panel-heading">
+                                    <h4 class="unicase-checkout-title">
+                                        <a data-toggle="collapse" class="" data-parent="#accordion">
+                                            <span>1</span>Thanh toán
+                                        </a>
+                                    </h4>
+                                </div>
+                                <!-- panel-heading -->
+
+                                <div id="collapseOne" class="panel-collapse collapse in">
+
+                                    <!-- panel-body  -->
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <!-- guest-login -->
+                                            <div class="col-md-8 col-sm-8 already-registered-login">
+                                                <h4 class="checkout-subtitle">Thông tin giao hàng</h4>
+                                                <form id="formDeliveryAddress">
+                                                    <div class="form-group">
+                                                        <label class="info-title">Tên người
+                                                            nhận
+                                                            <span>*</span></label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            id="full_name" placeholder="" name="full_name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Số điện
+                                                            thoại
+                                                            <span>*</span></label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            id="cellphone" placeholder="" name="cellphone_">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Địa chỉ
+                                                            <span>*</span></label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">
+                                                            <select id="province" class="form-control"
+                                                                onchange="loadDistrict()" name="select_province">
+                                                                <option hidden value="0">---Chọn tỉnh, thành phố---
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <select id="district" class="form-control"
+                                                                onchange="loadCommune()" name="select_district">
+                                                                <option hidden value="0">---Chọn quận, huyện---</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <select id="commune" class="form-control" name="select_commune">
+                                                                <option hidden value="0">---Chọn xã, phường, trị trấn---
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="margin-top: 65px">
+                                                        <label class="info-title">Địa chỉ cụ thể
+                                                            <span>*</span></label>
+                                                        <input type="text"
+                                                            class="form-control unicase-form-control text-input"
+                                                            required id="detail_" name="detail_">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- guest-login -->
+
+                                            <!-- already-registered-login -->
+                                            <div class="col-md-4 col-sm-4">
+                                                <h4 class="checkout-subtitle">Thông tin sản phẩm</h4>
+                                                <div id="myTabContent" class="tab-content category-list">
+                                                    <div class="tab-pane active" id="list-container">
+                                                        <div class="category-product">
+                                                            <div class="category-product-inner wow fadeInUp animated"
+                                                                style="visibility: visible;"
+                                                                th:id="'product-' + ${productResponse.id}">
+                                                                <div class="products">
+                                                                    <div class="product-list product">
+                                                                        <div class="row product-list-row">
+                                                                            <div class="col col-sm-4 col-lg-4">
+                                                                                <div>
+                                                                                    <div> <img
+                                                                                            th:src="${productResponse.mainImage}"
+                                                                                            alt=""
+                                                                                            style="margin-left: 50%;
+                                                                                        transform: translate(-50%, 0); object-fit: contain; width: 80px; height: 80px;">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- /.product-image -->
+                                                                            </div>
+                                                                            <!-- /.col -->
+                                                                            <div class="col col-sm-8 col-lg-8"
+                                                                                style="padding-bottom: 20px;">
+                                                                                <div class="product-info">
+                                                                                    <h3 class="name">
+                                                                                        <a
+                                                                                            style="text-decoration: none;">[[${productResponse.name}]]</a>
+                                                                                    </h3>
+                                                                                    <!-- <div class="product-price"> <span
+                                                                                            class="price">
+                                                                                            [[${productResponse.price}]]
+                                                                                        </span></div> -->
+                                                                                    <!-- /.product-price -->
+                                                                                    <!-- /.cart -->
+                                                                                </div>
+                                                                                <!-- /.product-info -->
+                                                                            </div>
+                                                                            <!-- /.col -->
+                                                                        </div>
+                                                                        <!-- /.product-list-row -->
+                                                                        <!-- <div class="tag new"><span>new</span></div> -->
+                                                                    </div>
+                                                                    <!-- /.product-list -->
+                                                                </div>
+                                                                <!-- /.products -->
+                                                            </div>
+                                                            <!-- /.category-product-inner -->
+                                                        </div>
+                                                        <!-- /.category-product -->
+                                                    </div>
+                                                    <!-- /.tab-pane #list-container -->
+                                                </div>
+                                                <br>
+                                                <br>
+                                                <h4 class="checkout-subtitle">Sản phẩm:  [[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                                                </h4>
+                                                <h4 class="checkout-subtitle">Phí giao hàng: 39,000 VNĐ</h4>
+                                                <h4 class="checkout-subtitle">Tổng tiền thanh toán:
+                                                    [[${#numbers.formatDecimal(productResponse.price + 39000, 0, 'COMMA', 0, 'POINT')}]] VNĐ</h4>
+                                                <br>
+                                                <p class="text title-tag-line" style="font-size: 14px;">Phương thức
+                                                    thanh toán:</p>
+                                                <div style="font-size: 13px;">
+                                                    <input id="COD" type="radio" name="methodPay" value="COD"
+                                                        checked="">
+                                                    <label class="radio-button guest-check" for="COD">COD</label>
+<!--                                                    <br>-->
+<!--                                                    <input id="MOMO" type="radio" name="methodPay" value="MOMO">-->
+<!--                                                    <label class="radio-button" for="MOMO">Momo</label>-->
+                                                    <br>
+                                                    <input id="VNPAY" type="radio" name="methodPay" value="VNPAY">
+                                                    <label class="radio-button" for="VNPAY">Vnpay</label>
+<!--                                                    <br>-->
+<!--                                                    <input id="ZALOPAY" type="radio" name="methodPay" value="ZALOPAY">-->
+<!--                                                    <label class="radio-button" for="ZALOPAY">Zalopay</label>-->
+                                                </div>
+                                                <a class="btn-upper btn btn-primary" style="text-decoration: none; margin-top: 10px;" onclick="checkout()">Đặt hàng</a>
+                                            </div>
+                                            <!-- already-registered-login -->
+
+                                        </div>
+                                    </div>
+                                    <!-- panel-body  -->
+
+                                </div><!-- row -->
+                            </div>
+                            <!-- checkout-step-01  -->
+
+                        </div><!-- /.checkout-steps -->
+                    </div>
+                </div><!-- /.row -->
+            </div>
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /#top-banner-and-menu -->
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+    <!-- <div th:replace="fragment::script-custom"></div> -->
+    <!-- jquery-validation -->
+    <script th:src="@{/assets/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var productId = /*[[${ productResponse.id }]]*/ '0';
+        /*]]>*/
+        var origin = window.location.origin;
+
+        $(document).ready(function () {
+            loadProvince();
+            $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                return arg !== value;
+            }, "Value must not equal arg.");
+            $.validator.addMethod("checkInvalid", function (value, element) {
+                return this.optional(element) || /((09|03|07|08|05)+([0-9]{8})\b)/g.test(value);
+            });
+        });
+
+        function checkout() {
+            if (!$('#formDeliveryAddress').valid()) {
+                toastr.warning("Hãy điền đầy đủ thông tin.");
+                return;
+            }
+
+            var feeShipping = 39000;
+            var methodPay = document.querySelector('input[name="methodPay"]:checked').value;
+            var province = $("#province option:selected").text();
+            var codeProvince = $("#province option:selected").val();
+            var district = $("#district option:selected").text();
+            var codeDistrict = $("#district option:selected").val();
+            var commune = $("#commune option:selected").text();
+            var codeCommune = $("#commune option:selected").val();
+            var detail = document.getElementById("detail_").value;
+            var fullName = document.getElementById('full_name').value;
+            var cellphone = document.getElementById('cellphone').value;
+
+            var deliveryAddressRequest = {
+                "fullName": fullName,
+                "cellphone": cellphone,
+                "province": province,
+                "codeProvince": codeProvince,
+                "district": district,
+                "codeDistrict": codeDistrict,
+                "commune": commune,
+                "codeCommune": codeCommune,
+                "detail": detail
+            }
+
+            var data = {
+                "feeShipping": feeShipping,
+                "methodPayment": methodPay,
+                "deliveryAddressRequest": deliveryAddressRequest,
+                "productId": productId
+            }
+
+            $.ajax({
+                method: "POST",
+                url: origin + "/user/order/create",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+            })
+                .done(function (dataLink) {
+                    
+
+                    if(methodPay != "COD")
+                    {
+                        location.href = dataLink;
+                    }
+                    else{
+                        location.href = origin + '/user/order/get-all';
+                        toastr.success("Đặt thành công !");
+                    }
+                })
+                .fail(function (error) {
+                    toastr.error(error.responseText);
+                })
+        }
+
+        function loadProvince() {
+            var listDistrict = document.getElementById("district");
+            listDistrict.value = "0";
+            var listCommune = document.getElementById("commune");
+            listCommune.value = "0";
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/?depth=1",
+            })
+                .done(function (data) {
+                    var listProvince = document.getElementById("province");
+                    data.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listProvince.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadDistrict() {
+            var listCommune = document.getElementById("commune");
+            listCommune.value = "0";
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/p/" + $('#province')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listDistrict = document.getElementById("district");
+                    $('#district').empty();
+                    listDistrict.innerHTML = "<option hidden value='0'>---Chọn quận, huyện---</option>";
+                    data.districts.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listDistrict.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadCommune() {
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/d/" + $('#district')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listCommune = document.getElementById("commune");
+                    $('#commune').empty();
+                    listCommune.innerHTML = "<option hidden value='0'>---Chọn xã, phường, trị trấn---</option>";
+                    data.wards.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listCommune.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        $(function () {
+                $('#formDeliveryAddress').validate({
+                    rules: {
+                        "full_name": {
+                            required: true,
+                        },
+                        "cellphone_": {
+                            required: true,
+                            checkInvalid: true,
+                        },
+                        "detail_": {
+                            required: true,
+                        },
+                        "select_province": {
+                            valueNotEquals: "0"
+                        },
+                        "select_district": {
+                            valueNotEquals: "0"
+                        },
+                        "select_commune": {
+                            valueNotEquals: "0"
+                        },
+                    },
+                    messages: {
+                        "full_name": {
+                            required: "Hãy nhập tên người nhận !",
+                        },
+                        "cellphone_": {
+                            required: "Hãy nhập số điện thoại !",
+                            checkInvalid: "Số điện thoại không hợp lệ !",
+                        },
+                        "detail_": {
+                            required: "Hãy nhập địa chỉ cụ thể !",
+                        },
+                        "select_province": {
+                            valueNotEquals: "Hãy chọn tỉnh thành phố!",
+                        },
+                        "select_district": {
+                            valueNotEquals: "Hãy chọn quận huyện !",
+                        },
+                        "select_commune": {
+                            valueNotEquals: "Hãy chọn xã phường !",
+                        },
+                    },
+                    errorElement: 'span',
+                    errorPlacement: function (error, element) {
+                        error.addClass('invalid-feedback');
+                        element.closest('.form-group').append(error);
+                    },
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).addClass('is-invalid');
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).removeClass('is-invalid');
+                    }
+                });
+            });
+    </script>
+</body>
+
+</html>

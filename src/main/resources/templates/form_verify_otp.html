@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Xác thực OTP</title>
+    <div th:replace="fragment::head-custom"></div>
+</head>
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="card">
+            <div class="card-body login-card-body">
+                <div class="login-logo">
+                    <b>Xác thực số điện thoại</b>
+                </div>
+                <form action="#" th:action="@{/verify-otp}" method="post" id="formSendOtp">
+                    <div class="input-group mb-3 form-group">
+                        <input type="text" th:value="${cellphone}?: ''" id="cellphone" class="form-control"
+                            placeholder="Số điện thoại của bạn" name="cellphone">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                        </div>
+                        <div class="input-group-append">
+                            <a type="submit" class="btn btn-primary btn-block" onclick="sendOtp()">Gửi OTP</a>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3 form-group">
+                        <input type="text" class="form-control" placeholder="OTP..." name="otp" id="otp">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <i class="fa-solid fa-keyboard"></i>
+                            </div>
+                        </div>
+                        <span class="error"
+                            style="display: block;width: 100%;margin-top: 0.25rem;font-size: 80%;color: #dc3545;">[[${status}]]</span>
+                        <!-- /.col -->
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary btn-block">Xác thực OTP</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-md-right">
+                            <a th:href="@{/login}" class="text-center">Về trang đăng nhập <i
+                                    class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+
+    <!-- <div th:replace="fragment::script-custom"></div> -->
+    <!-- jquery-validation -->
+    <script th:src="@{/assets/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-validation/additional-methods.min.js}"></script>
+
+    <script>
+        var origin = window.location.origin;
+        $(document).ready(function () {
+            $.validator.addMethod("checkInvalid", function (value, element) {
+                return this.optional(element) || /((09|03|07|08|05)+([0-9]{8})\b)/g.test(value);
+            });
+
+            $.validator.addMethod("checkInvalidOtp", function (value, element) {
+                return this.optional(element) || /(([0-9]{4})\b)/g.test(value);
+            });
+
+            $.validator.addMethod("checkCellphoneExists", function (value, element) {
+                var result = checkCellphone();
+                return result;
+            });
+        });
+
+        $(function () {
+            $('#formSendOtp').validate({
+                rules: {
+                    cellphone: {
+                        required: true,
+                        checkInvalid: true,
+                        checkCellphoneExists: true,
+                    },
+                    otp: {
+                        required: true,
+                        checkInvalidOtp: true,
+                    },
+                },
+                messages: {
+                    cellphone: {
+                        required: "Hãy nhập số điện thoại !",
+                        checkInvalid: "Số điện thoại không hợp lệ !",
+                        checkCellphoneExists: "Số điện thoại đã được đăng ký với một tài khoản khác !",
+                    },
+                    otp: {
+                        required: "Hãy nhập OTP !",
+                        checkInvalidOtp: "Otp là chuối gồm 4 só !",
+                    },
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+
+        function checkCellphone() {
+
+            var cellphone = document.getElementById("cellphone").value;
+            var data = { "cellphone": cellphone };
+
+            var check = false;
+
+            var url = origin + "/check-cellphone-exist";
+
+            $.ajax({
+                method: "POST",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                async: false
+            })
+                .done(function (data) {
+                    check = true;
+                })
+                .fail(function () {
+                    toastr.warning("Không thể sử dụng số điện thoại này.");
+                    check = false;
+                })
+
+            return check;
+        };
+
+        function sendOtp() {
+            if ($('#cellphone').valid()) {
+                var cellphone = document.getElementById("cellphone").value;
+                var data = { "cellphone": cellphone };
+
+                $.ajax({
+                    method: "POST",
+                    url: origin + "/generate-otp",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data),
+                })
+                    .done(function (data) {
+                        toastr.success(data);
+                        // document.getElementById('checkSendOtpSuccess').innerHTML = "0";
+                    })
+                    .fail(function (error) {
+                        toastr.error(error.responseText);
+                    })
+            }
+        }
+    </script>
+</body>
+
+</html>

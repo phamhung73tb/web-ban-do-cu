@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin đăng ký</title>
+    <div th:replace="fragment::head-custom"></div>
+</head>
+<body class="hold-transition register-page">
+<div class="register-box">
+    <div class="card">
+        <div class="card-body register-card-body">
+            <div class="register-logo">
+                <b>Đăng ký tài khoản</b>
+            </div>
+
+            <form id="formRegister" method="post" th:action="@{/register}" th:object="${userRequest}">
+                <input type="hidden" th:value="*{cellphone}" th:field="*{cellphone}">
+                <div class="input-group mb-3 form-group">
+                    <input th:field="*{username}" type="text" name="username" class="form-control" placeholder="Tên đăng nhập" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text" id="username-icon">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input th:field="*{fullName}" type="text" name="fullname" class="form-control" placeholder="Họ và tên" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3 form-group">
+                    <input th:field="*{email}" type="email" name="email" class="form-control" placeholder="Email" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text" id="email-icon">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3 form-group">
+                    <input th:field="*{password}" type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3 form-group">
+                    <input type="password" class="form-control" name="re-password" placeholder="Xác nhận mật khẩu" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.form-box -->
+    </div><!-- /.card -->
+</div>
+
+<div th:replace="fragment::script-custom"></div>
+
+<script>
+  var origin = window.location.origin;
+
+    $(document).ready(function () {
+
+      $.validator.addMethod("checkSpace", function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9_]*$/i.test(value);
+      });
+
+      $.validator.addMethod("checkUsernameExists", function (value, element) {
+        return checkUsername();
+      });
+
+      $.validator.addMethod("checkEmailExists", function (value, element) {
+        var result = checkEmail();
+        return result;
+      });
+
+    });
+
+    $(function () {
+      $('#formRegister').validate({
+        rules: {
+          username: {
+            required: true,
+            checkSpace: true,
+            checkUsernameExists: true,
+            minlength: 4,
+          },
+          fullname: {
+            required: true,
+          },
+          email: {
+            required: true,
+            email: true,
+            checkEmailExists: true,
+          },
+          password: {
+            required: true,
+            minlength: 8,
+          },
+          "re-password": {
+            required: true,
+            equalTo: "#password",
+		  },
+        },
+        messages: {
+          username: {
+            required: "Hãy nhập tên đăng nhập !",
+            checkSpace: "Tên đăng nhập không được gồm khoản trắng, có dấu, ký tự đặt biệt!",
+            checkUsernameExists: "Tên đăng nhập đã tồn tại !",
+            minlength: "Tên đăng nhập phải trên 4 kí tự",
+          },
+          fullname: {
+            required: "Hãy điền họ tên !",
+          },
+          email: {
+            required: "Hãy nhập email !",
+            email: "Email không hợp lệ !",
+            checkEmailExists: "Email đã tồn tại !",
+          },
+          password: {
+            required: "Hãy nhập mật khẩu !",
+            minlength: "Mật khẩu phải trên 8 ký tự !",
+          },
+          "re-password": {
+            required: "Hãy nhập mật khẩu !",
+            equalTo: "Mật khẩu không đồng nhất",
+		  },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
+    });
+
+    function checkUsername() {
+      var username = document.getElementById("username").value;
+      var data = { "username": username };
+
+      var check = false;
+
+      $.ajax({
+        method: "POST",
+        url: origin + "/check-username-exist",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(data),
+        async: false
+      })
+        .done(function (data) {
+          document.getElementById("username-icon").innerHTML = "<i class='fa-solid fa-check' style='color: green;'></i>";
+          check = true;
+        })
+        .fail(function () {
+          document.getElementById("username-icon").innerHTML = "<span class='fas fa-user'></span>";
+          toastr.warning("Không thể sử dụng tên đăng nhập này");
+          check = false;
+        })
+
+      return check;
+    }
+
+    function checkEmail() {
+
+      var email = document.getElementById("email").value;
+      var data = { "email": email };
+
+      var check = false;
+
+      $.ajax({
+        method: "POST",
+        url: origin + "/check-email-exist",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(data),
+        async: false
+      })
+      .done(function (data) {
+          document.getElementById("email-icon").innerHTML = "<i class='fa-solid fa-check' style='color: green;'></i>";
+          check = true;
+        })
+        .fail(function () {
+          document.getElementById("email-icon").innerHTML = "<span class='fas fa-envelope'></span>";
+          toastr.warning("Không thể sử dụng email này");
+          check = false;
+        })
+
+      return check;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tạo loại sản phẩm mới</title>
+    <div th:replace="fragment::head-custom"></div>
+    <style>
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 50%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes animatezoom {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+    </style>
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="min-height: 1599.06px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-12">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/category/get-all}">Quản lý loại sản phẩm</a></li>
+                    <li class="breadcrumb-item active">Tạo mới</li>
+                  </ol>
+                </div>
+              </div>
+            </div><!-- /.container-fluid -->
+          </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6" style="    flex: 0 0 100%; max-width: 100%;">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Thêm loại sản phẩm</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form th:action="@{/admin/category/create}" method="post" th:object="${categoryRequest}"
+                                enctype="multipart/form-data" id="formCreateCategory">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Tên loại sản phẩm</label>
+                                        <input type="text" class="form-control" th:id="name"
+                                            placeholder="Tên loại sản phẩm" th:name="name" th:field="*{name}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fileImage" class="btn btn-success"><i class="fa-solid fa-upload"></i> Chọn ảnh</label>
+                                        <input id="fileImage" th:name="image" type="file"
+                                            accept="image/png, image/jpg, image/jpeg" style="display: none;" required>
+                                        <img id="thumbnail" alt="image preview" width="200px" style="display: none;" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Thuộc danh mục</label>
+                                        <div>
+                                            <select class="form-control" th:id="categoryParentId"
+                                                th:name="categoryParentId" onchange="loadProperties()"
+                                                th:field="*{categoryParentId}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="display: none;" id="properties_select">
+                                        <label class="col-sm-6" style="padding-left: 0px;">Thêm thuộc tính</label>
+                                        <a onclick="document.getElementById('id01').style.display='block'"
+                                            style="width:auto;" class="btn btn-primary btn-sm col-sm-6 float-right">Tạo thêm thuộc
+                                            tính</a>
+                                        <select class="form-control" th:id="propertyRequestList"
+                                            th:name="propertyRequestList" multiple="true"
+                                            th:field="*{propertyRequestList}">
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary" onclick="checkInputImage()">Thêm loại
+                                        sản phẩm</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!--/.col (left) -->
+                    <!--/.col (right) -->
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+
+
+    <div id="id01" class="modal" style="z-index: 99999;">
+        <form class="modal-content animate">
+            <div class="form-group card-body" style="margin-bottom: 0px">
+                <label>Tên thuộc tính</label>
+                <input type="text" class="form-control" placeholder="Tên thuộc tính" id="nameProperty_">
+            </div>
+            <div class="form-group card-body" style="margin-bottom: 0px">
+                <label>Đơn vị</label>
+                <input type="text" class="form-control" placeholder="Có thể bỏ trống" id="unit_">
+            </div>
+            <div class="form-group card-body" style="margin-bottom: 0px">
+                <label>Ghi chú</label>
+                <input type="text" class="form-control" placeholder="Có thể bỏ trống" id="note_">
+            </div>
+            <div class="card-body" style="background-color:#f1f1f1">
+                <a class="btn btn-primary" onclick="createProperty()">Thêm thuộc tính</a>
+                <a type="button" onclick="document.getElementById('id01').style.display='none'"
+                    class="btn btn-primary btn-danger">Hủy</a>
+            </div>
+        </form>
+    </div>
+
+    <div th:replace="fragment::footer-admin"></div>
+
+    <div th:replace="fragment::script-custom"></div>
+
+    <script>
+        var origin = window.location.origin;
+
+        $(document).ready(function () {
+            $('#fileImage').change(function () {
+                showImageThumbnail(this);
+            });
+
+            getCategoryParent();
+            getProperties();
+        });
+
+        // Get the modal
+        var modal = document.getElementById('id01');
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+
+
+        function showImageThumbnail(fileInput) {
+            file = fileInput.files[0];
+            reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#thumbnail').attr('src', e.target.result);
+                document.getElementById('thumbnail').style.display = "block";
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+        function loadProperties() {
+            var check = document.getElementById('categoryParentId').value;
+            if (check != '0') {
+                document.getElementById("properties_select").style.display = "block";
+            }
+            else {
+                document.getElementById("properties_select").style.display = "none";
+            }
+        }
+
+        function createProperty() {
+            var name = document.getElementById("nameProperty_").value;
+            var unit = document.getElementById("unit_").value;
+            var note = document.getElementById("note_").value;
+            var data = {
+                "name": name,
+                "unit": unit,
+                "note": note
+            }
+
+            $.ajax({
+                method: "POST",
+                url: origin + "/admin/property/create",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+            })
+                .done(function (data) {
+                    modal.style.display = "none";
+                    toastr.success("Tạo thuộc tính thành công !");
+                    getProperties();
+                })
+                .fail(function () {
+                    toastr.error("Đã có lỗi xảy ra khi tạo thuộc tính, vui lòng thử lại sau !");
+                })
+        }
+
+        function getProperties() {
+            $.ajax({
+                method: "GET",
+                url: origin + "/admin/property/get-all",
+                contentType: "application/json; charset=utf-8",
+            })
+                .done(function (dataJson) {
+                    var propertyRequestList = $('#propertyRequestList');
+                    propertyRequestList.empty();
+                    $.each(dataJson, function (index, property) {
+                        $("<option>").val(property.id).text(property.name).appendTo(propertyRequestList)
+                    })
+
+                })
+                .fail(function () {
+                    toastr.error("Đã có lỗi xảy ra khi lấy danh sách thuộc tính, vui lòng thử lại sau !");
+                })
+        }
+
+        function getCategoryParent() {
+            $.ajax({
+                method: "GET",
+                url: origin + "/admin/category/get-all-not-parent",
+                contentType: "application/json; charset=utf-8",
+            })
+                .done(function (dataJson) {
+                    var categoryList = $('#categoryParentId');
+                    $("<option>").val(0).text("Không").appendTo(categoryList)
+                    $.each(dataJson, function (index, category) {
+                        $("<option>").val(category.id).text(category.name).appendTo(categoryList)
+                    })
+
+                })
+                .fail(function () {
+                    toastr.error("Đã có lỗi xảy ra khi lấy danh sách loại sản phẩm cha, vui lòng thử lại sau !");
+                })
+        }
+
+        function checkInputImage() {
+            var inputImage = document.getElementById("fileImage");
+            if (inputImage.files.length == 0) {
+                toastr.warning("Hãy chọn ảnh !");
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

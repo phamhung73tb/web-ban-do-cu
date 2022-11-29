@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Chi tiết đơn hàng</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 50%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes animatezoom {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+    </style>
+</head>
+
+<body class="cnt-home">
+<div th:replace="fragment::header-user"></div>
+<!-- ============================================== HEADER : END ============================================== -->
+<div class="body-content outer-top-xs" id="top-banner-and-menu">
+    <div class="container">
+        <div class="checkout-box ">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel-group checkout-steps" id="accordion">
+                        <!-- checkout-step-01  -->
+                        <div class="panel panel-default checkout-step-01">
+
+                            <!-- panel-heading -->
+                            <div class="panel-heading">
+                                <h4 class="unicase-checkout-title">
+                                    <a data-toggle="collapse" class="" data-parent="#accordion">
+                                        <span>1</span>Thông tin đơn hàng
+                                    </a>
+                                </h4>
+                            </div>
+                            <!-- panel-heading -->
+
+                            <div id="collapseOne" class="panel-collapse collapse in">
+                                <!-- panel-body  -->
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <!-- already-registered-login -->
+                                        <div class="col-md-12 col-sm-12 already-registered-login">
+                                            <h4 class="checkout-subtitle">Thông tin sản phẩm</h4>
+                                            <div id="myTabContent" class="tab-content category-list">
+                                                <div class="tab-pane active" id="list-container">
+                                                    <div class="category-product">
+                                                        <div class="category-product-inner wow fadeInUp animated"
+                                                             style="visibility: visible;"
+                                                             th:id="'product-' + ${orderResponse.productResponse.id}">
+                                                            <div class="products">
+                                                                <div class="product-list product">
+                                                                    <div class="row product-list-row">
+                                                                        <div class="col col-sm-4 col-lg-4">
+                                                                            <div>
+                                                                                <div><img
+                                                                                        th:src="${orderResponse.productResponse.mainImage}"
+                                                                                        alt=""
+                                                                                        style="margin-left: 50%;
+                                                                                        transform: translate(-50%, 0); object-fit: contain; width: 150px; height: 150px;">
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- /.product-image -->
+                                                                        </div>
+                                                                        <!-- /.col -->
+                                                                        <div class="col col-sm-8 col-lg-8"
+                                                                             style="padding-bottom: 20px;">
+                                                                            <div class="product-info">
+                                                                                <h3 class="name">
+                                                                                    <a
+                                                                                            style="text-decoration: none;">[[${orderResponse.productResponse.name}]]
+                                                                                    </a>
+                                                                                </h3>
+                                                                            </div>
+                                                                            <!-- /.product-info -->
+                                                                        </div>
+                                                                        <!-- /.col -->
+                                                                    </div>
+                                                                    <!-- /.product-list-row -->
+                                                                    <!-- <div class="tag new"><span>new</span></div> -->
+                                                                </div>
+                                                                <!-- /.product-list -->
+                                                            </div>
+                                                            <!-- /.products -->
+                                                        </div>
+                                                        <!-- /.category-product-inner -->
+                                                    </div>
+                                                    <!-- /.category-product -->
+                                                </div>
+                                                <!-- /.tab-pane #list-container -->
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <h4 class="checkout-subtitle">Sản phẩm:
+                                                [[${#numbers.formatDecimal(orderResponse.priceProduct, 0,'COMMA', 0,
+                                                'POINT')}]] VNĐ
+                                            </h4>
+                                            <h4 class="checkout-subtitle">Phí giao hàng:
+                                                [[${#numbers.formatDecimal(orderResponse.feeShipping, 0,'COMMA', 0,
+                                                'POINT')}]] VNĐ</h4>
+                                            <h4 class="checkout-subtitle">Tổng tiền thanh toán:
+                                                [[${#numbers.formatDecimal(orderResponse.priceProduct +
+                                                orderResponse.feeShipping, 0,'COMMA', 0, 'POINT')}]] VNĐ
+                                            </h4>
+                                            <br>
+                                        </div>
+                                        <!-- already-registered-login -->
+                                        <!-- guest-login -->
+                                        <div class="col-md-12 col-sm-12 already-registered-login">
+                                            <h4 class="checkout-subtitle">Thông tin giao hàng</h4>
+                                            <form>
+                                                <div class="form-group">
+                                                    <label class="info-title">Mã đơn hàng
+                                                    </label>
+                                                    <input type="text"
+                                                           class="form-control unicase-form-control text-input"
+                                                           placeholder="" th:value="${orderResponse.id}" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="info-title">Trạng thái
+                                                    </label>
+                                                    <input type="text"
+                                                           class="form-control unicase-form-control text-input"
+                                                           placeholder="" th:value="${orderResponse.status}" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="info-title">Ngày đặt
+                                                    </label>
+                                                    <input type="text"
+                                                           class="form-control unicase-form-control text-input"
+                                                           placeholder="" th:value="${orderResponse.createTime}"
+                                                           disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="info-title">Phương thức thanh toán
+                                                    </label>
+                                                    <input type="text"
+                                                           class="form-control unicase-form-control text-input"
+                                                           placeholder="" th:value="${orderResponse.methodPayment}"
+                                                           disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="info-title">Tên người
+                                                        nhận
+                                                    </label>
+                                                    <input type="text"
+                                                           class="form-control unicase-form-control text-input"
+                                                           id="full_name" placeholder=""
+                                                           th:value="${orderResponse.deliveryAddressResponse.fullName}"
+                                                           disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="info-title">Số điện
+                                                        thoại
+                                                    </label>
+                                                    <input type="text"
+                                                           class="form-control unicase-form-control text-input"
+                                                           id="cellphone" placeholder=""
+                                                           th:value="${orderResponse.deliveryAddressResponse.cellphone}"
+                                                           disabled>
+                                                </div>
+                                                <div class="form-group" style="margin-top: 15px">
+                                                    <label class="info-title">Địa chỉ
+                                                    </label>
+                                                    <input type="text"
+                                                           class="form-control unicase-form-control text-input"
+                                                           required th:value="${orderResponse.deliveryAddressResponse.detail}
+                                                            + ', ' + ${orderResponse.deliveryAddressResponse.commune}
+                                                            + ', ' + ${orderResponse.deliveryAddressResponse.district}
+                                                            + ', ' + ${orderResponse.deliveryAddressResponse.province}"
+                                                           disabled>
+                                                </div>
+                                                <div th:if="${orderResponse.status == 'Chờ xác nhận' || orderResponse.status == 'Chưa thanh toán'}"
+                                                     class="btn btn-info btn-sm" onclick="getAddress()">Đổi địa
+                                                    chỉ giao
+                                                </div>
+                                                <div th:if="${orderResponse.status == 'Chưa thanh toán'}"
+                                                     class="btn btn-info btn-sm"
+                                                     onclick="document.getElementById('id02').style.display='block'">
+                                                    Thanh toán lại
+                                                </div>
+                                                <div th:if="${orderResponse.status == 'Chờ xác nhận' || orderResponse.status == 'Chưa thanh toán'}"
+                                                     class="btn btn-danger btn-sm" onclick="cancelOrder()">Hủy đơn
+                                                    hàng
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- guest-login -->
+                                    </div>
+                                </div>
+                                <!-- panel-body  -->
+
+                            </div><!-- row -->
+                        </div>
+                        <!-- checkout-step-01  -->
+
+                    </div><!-- /.checkout-steps -->
+                </div>
+            </div><!-- /.row -->
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+<div id="id01" class="modal" style="z-index: 99999;">
+    <form class="modal-content animate">
+        <div class="form-group card-body" style="margin-bottom: 0px">
+            <label>Tên người nhận</label>
+            <input type="text" class="form-control" id="full_name_"
+                   th:value="${orderResponse.deliveryAddressResponse.fullName}">
+        </div>
+        <div class="form-group card-body" style="margin-bottom: 0px">
+            <label>Số điện thoại</label>
+            <input type="text" class="form-control" id="cellphone_"
+                   th:value="${orderResponse.deliveryAddressResponse.cellphone}">
+        </div>
+        <div class="form-group card-body" style="margin-bottom: 30px;">
+            <label class="info-title">Địa chỉ:</label>
+            <div>
+                <div class="col-sm-4">
+                    <select id="province" class="form-control" onchange="loadDistrict()">
+                        <option hidden th:value="${orderResponse.deliveryAddressResponse.codeProvince}">
+                            [[${orderResponse.deliveryAddressResponse.province}]]
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <select id="district" class="form-control" onchange="loadCommune()">
+                        <option hidden th:value="${orderResponse.deliveryAddressResponse.codeDistrict}">
+                            [[${orderResponse.deliveryAddressResponse.district}]]
+                        </option>
+                        <option hidden value='0'>---Chọn quận, huyện---</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <select id="commune" class="form-control">
+                        <option hidden th:value="${orderResponse.deliveryAddressResponse.codeCommune}">
+                            [[${orderResponse.deliveryAddressResponse.commune}]]
+                        </option>
+                        <option hidden value='0'>---Chọn xã, phường, trị trấn---</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group card-body" style="margin-bottom: 0px">
+            <label>Địa chỉ cụ thể: </label>
+            <input type="text" class="form-control" id="detail_"
+                   th:value="${orderResponse.deliveryAddressResponse.detail}">
+        </div>
+        <div class="card-body" style="background-color:#f1f1f1">
+            <a class="btn btn-info" onclick="changeDelivery()">Xác nhận đổi</a>
+            <a type="button" onclick="document.getElementById('id01').style.display='none'"
+               class="btn btn-danger btn-danger">Hủy</a>
+        </div>
+    </form>
+</div>
+
+<div id="id02" class="modal" style="z-index: 99999;">
+    <form class="modal-content animate">
+        <div class="form-group card-body" style="margin-bottom: 40px">
+            <label>Chọn phương thức thanh toán</label>
+            <div class="col-sm-12">
+                <select id="methodPayment_" class="form-control">
+                    <option value="COD">COD</option>
+                    <option value="MOMO">Momo</option>
+                    <option value="VNPAY">Vnpay</option>
+                    <option value="ZALOPAY">Zalopay</option>
+                </select>
+            </div>
+        </div>
+        <div class="card-body" style="background-color:#f1f1f1">
+            <a class="btn btn-info" onclick="rePayment()">Thanh toán</a>
+            <a type="button" onclick="document.getElementById('id02').style.display='none'"
+               class="btn btn-danger btn-danger">Hủy</a>
+        </div>
+    </form>
+</div>
+<!-- /#top-banner-and-menu -->
+<div th:replace="fragment::footer-user"></div>
+
+<div th:replace="fragment::script-custom2"></div>
+
+<script th:inline="javascript">
+        /*<![CDATA[*/
+        var orderId = /*[[${ orderResponse.id }]]*/ '0';
+        var code_province = /*[[${orderResponse.deliveryAddressResponse.codeProvince}]]*/ '0';
+        var code_district = /*[[${orderResponse.deliveryAddressResponse.codeDistrict}]]*/ '0';
+        var code_commune = /*[[${orderResponse.deliveryAddressResponse.codeCommune}]]*/ '0';
+        /*]]>*/
+        var origin = window.location.origin;
+
+        $(document).ready(function () {
+
+        });
+        // Get the modal
+        var modal = document.getElementById('id01');
+        var modal2 = document.getElementById('id02');
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal2) {
+                modal2.style.display = "none";
+            }
+        }
+
+        function rePayment() {
+            var methodPayment = $("#methodPayment_ option:selected").val();
+            $.ajax({
+                method: 'POST',
+                url: origin + "/user/order/repayment/" + orderId + "?methodPayment=" + methodPayment,
+            })
+                .done(function (data) {
+                    if (methodPayment == 'COD') {
+                        toastr.success(data);
+                        location.reload();
+                    }
+                    else {
+                        location.href = data;
+                    }
+
+                })
+                .fail(function (error) {
+                    toastr.error(error.responseText);
+                });
+        }
+
+        function cancelOrder() {
+            $.ajax({
+                method: 'PUT',
+                url: origin + "/user/order/cancel-order/" + orderId,
+            })
+                .done(function (data) {
+                    toastr.success(data);
+                    location.reload();
+                })
+                .fail(function (error) {
+                    toastr.error(error.responseText);
+                });
+        }
+
+        function changeDelivery() {
+            var cellphone = document.getElementById("cellphone_").value;
+            var fullName = document.getElementById("full_name_").value;
+            var province = $("#province option:selected").text();
+            var codeProvince = $("#province option:selected").val();
+            var district = $("#district option:selected").text();
+            var codeDistrict = $("#district option:selected").val();
+            var commune = $("#commune option:selected").text();
+            var codeCommune = $("#commune option:selected").val();
+            var detail = document.getElementById("detail_").value;
+
+            var data = {
+                "fullName": fullName,
+                "cellphone": cellphone,
+                "province": province,
+                "codeProvince": codeProvince,
+                "district": district,
+                "codeDistrict": codeDistrict,
+                "commune": commune,
+                "codeCommune": codeCommune,
+                "detail": detail
+            }
+            $.ajax({
+                method: 'POST',
+                url: origin + "/user/order/change-delivery-address/" + orderId,
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+            })
+                .done(function (data) {
+                    toastr.success(data);
+                    location.reload();
+                })
+                .fail(function (error) {
+                    toastr.error(error.responseText);
+                });
+        }
+
+        function getAddress() {
+            document.getElementById('id01').style.display = 'block';
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/?depth=1",
+            })
+                .done(function (data) {
+                    var listProvince = document.getElementById("province");
+                    data.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listProvince.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/p/" + $('#province')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listDistrict = document.getElementById("district");
+                    data.districts.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listDistrict.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/d/" + $('#district')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listCommune = document.getElementById("commune");
+                    data.wards.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listCommune.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadProvince() {
+            var listDistrict = document.getElementById("district");
+            listDistrict.value = "0";
+            var listCommune = document.getElementById("commune");
+            listCommune.value = "0";
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/?depth=1",
+            })
+                .done(function (data) {
+                    var listProvince = document.getElementById("province");
+                    data.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listProvince.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadDistrict() {
+            var listCommune = document.getElementById("commune");
+            listCommune.value = "0";
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/p/" + $('#province')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listDistrict = document.getElementById("district");
+                    $('#district').empty();
+                    listDistrict.innerHTML = "<option hidden value='0'>---Chọn quận, huyện---</option>";
+                    data.districts.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listDistrict.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+        function loadCommune() {
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/d/" + $('#district')[0].value + "?depth=2",
+            })
+                .done(function (data) {
+                    var listCommune = document.getElementById("commune");
+                    $('#commune').empty();
+                    listCommune.innerHTML = "<option hidden value='0'>---Chọn xã, phường, trị trấn---</option>";
+                    data.wards.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listCommune.appendChild(op);
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+
+</script>
+
+</script>
+</body>
+
+</html>

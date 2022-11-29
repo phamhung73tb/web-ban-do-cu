@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <div th:replace="fragment::head-custom"></div>
+</head>
+
+<body class="hold-transition login-page">
+  <div class="login-box">
+    <div class="card">
+      <div class="card-body login-card-body">
+        <div class="login-logo">
+          <b>Chợ cũ</b>
+        </div>
+        <p style="color: red;">[[${statusLogin}]]</p>
+        <form th:action="@{/login}" method="post" th:object="${loginRequest}" id="formLogin">
+          <div class="input-group mb-3 form-group">
+            <input type="text" th:field="*{username}" class="form-control" placeholder="Tên đăng nhập" name="username">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa-solid fa-user"></i>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3 form-group">
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Mật khẩu" name="password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-12 text-md-right">
+            <a th:href="@{/generate-otp}" class="text-center">Đăng ký tài khoản <i
+                class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-md-right">
+            <a th:href="@{/forget-password}" class="text-center">Quên mật khẩu <i
+                class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-md-right">
+            <a th:href="@{/home}" class="text-center">Về trang chủ <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <!-- /.login-card-body -->
+    </div>
+  </div>
+  <!-- /.login-box -->
+  <div th:replace="fragment::script-custom"></div>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    var statusRegister = /*[[${ statusRegister }]]*/ '0';
+    /*]]>*/
+
+    $(document).ready(function () {
+      if(statusRegister == 'Đăng ký thành công !!!'){
+        toastr.success(statusRegister);
+      }
+    });
+
+    $(function () {
+      $('#formLogin').validate({
+        rules: {
+          username: {
+            required: true,
+          },
+          password: {
+            required: true,
+          },
+        },
+        messages: {
+          username: {
+            required: "Hãy nhập tên đăng nhập !",
+          },
+          password: {
+            required: "Hãy nhập mật khẩu !",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
+    });
+
+  </script>
+</body>
+
+</html>

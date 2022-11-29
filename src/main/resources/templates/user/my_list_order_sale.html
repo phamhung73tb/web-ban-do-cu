@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Danh sách đơn bán</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+    </style>
+</head>
+
+<body class="cnt-home">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs" id="top-banner-and-menu">
+        <div class="breadcrumb" style="font-size: 13px;">
+            <div class="container">
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li class="active">Danh sách đơn bán</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="shopping-cart">
+                    <section class="content-header">
+                        <div class="container-fluid">
+                            <div class="row mb-2">
+                                <div class="col-sm-12">
+                                    <div class="input-group-append col-sm-3">
+                                        <select class="form-control form-control" id="select_status">
+                                            <option value="all">Tất cả</option>
+                                            <option value="DELIVERY">Đang giao</option>
+                                            <option value="COMPLETED">Hoàn thành</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group-append col-sm-3">
+                                        <input type="date" class="form-control form-control" id="date_from" placeholder="dd-mm-yyyy" value=""
+                                        min="1997-01-01" max="2030-12-31">
+                                    </div>
+                                    <div class="input-group-append col-sm-3">
+                                        <input type="date" class="form-control form-control" id="date_to" min="1997-01-01" max="2030-12-31">
+                                    </div>
+                                    <div class="input-group-append col-sm-3">
+                                        <a onclick="filter()" class="btn btn-primary">
+                                            Lọc
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.container-fluid -->
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="font-size: 14px">
+            <div class="row">
+                <div class="shopping-cart">
+                    <div class="col col-sm-6 col-md-7 text-right">
+                        <div class="col-sm-12">
+                            <div class="col-sm-6 text-left">
+                                Tổng số đơn hàng: [[${total_order}]]
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                Tổng tiền sản phẩm: <span style="color:red"
+                                    th:text="${#numbers.formatDecimal(total_money, 0,'COMMA', 0, 'POINT')}">0</span> VND
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6 col-md-5 text-right">
+                        <div class="pagination-container">
+                            <ul class="list-inline list-unstyled">
+                                <li th:if="${current_page > 1}" class="prev"><a
+                                        th:href="@{'/user/order/get-all-sale?page=' + ${current_page - 1} + '&from=' + ${from} + '&to=' + ${to} + '&status=' + ${status}}"><i
+                                            class="fa fa-angle-left"></i></a></li>
+                                <li th:unless="${current_page > 1}" class="prev"><a><i class="fa fa-angle-left"></i></a>
+                                </li>
+                                <th:block th:if="${total_page != 0}" th:each="i: ${#numbers.sequence(1, total_page)}">
+                                    <li th:if="${i == current_page}"
+                                        class="active"><a>[[${i}]]</a></li>
+                                    <li th:unless="${i == current_page}"><a
+                                            th:href="@{'/user/order/get-all-sale?page=' + ${i} + '&from=' + ${from} + '&to=' + ${to} + '&status=' + ${status}}">[[${i}]]</a>
+                                    </li>
+                                </th:block>
+                                <li th:if="${total_page > current_page}" class="next"><a
+                                        th:href="@{'/user/order/get-all-sale?page=' + ${current_page + 1} + '&from=' + ${from} + '&to=' + ${to} + '&status=' + ${status}}"><i
+                                            class="fa fa-angle-right"></i></a></li>
+                                <li th:unless="${total_page > current_page}" class="next"><a><i
+                                            class="fa fa-angle-right"></i></a></li>
+                            </ul><!-- /.list-inline -->
+                        </div>
+                        <!-- /.pagination-container -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row ">
+                <div class="shopping-cart">
+                    <div class="shopping-cart-table ">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="cart-romove item">Tên sản phẩm</th>
+                                        <th class="cart-total last-item">Tổng tiền</th>
+                                        <th class="cart-product-name item">Ngày đặt</th>
+                                        <th class="cart-edit item">Trạng thái</th>
+                                        <th class="cart-romove item" style="width: 88px;">Chi tiết</th>
+                                    </tr>
+                                </thead><!-- /thead -->
+                                <tbody style="font-size: 14px;">
+                                    <tr th:if="${0 >= list_order.size()}" class="text-center">
+                                        <td colspan="5"> Bạn chưa có đơn hàng nào !!!</td>
+                                    </tr>
+                                    <th:block th:each="order : ${list_order}">
+                                        <tr>
+                                            <td class="cart-product-name-info">
+                                                <a
+                                                    th:href="@{'/user/product/detail/' + ${order.productResponse.id}}">[[${order.productResponse.name}]]</a>
+                                            </td>
+                                            <td class="cart-product-sub-total">
+                                                <span class="cart-sub-total-price" style="font-size: 14px;">
+                                                    [[${#numbers.formatDecimal(order.priceProduct,0,'COMMA', 0, 'POINT')}]]
+                                                </span>
+                                            </td>
+                                            <td class="romove-item"><span>[[${order.createTime}]]</span></td>
+                                            </td>
+                                            <td class="cart-image text-center"><span>[[${order.status}]]</span></td>
+                                            <td class="cart-product-name-info">
+                                                <a th:href="@{'/user/order/sale/' + ${order.id}}"><i
+                                                        class="fa-solid fa-arrow-right"></i></a></h4>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                </tbody><!-- /tbody -->
+                            </table><!-- /table -->
+                        </div>
+                    </div><!-- /.shopping-cart-table -->
+                </div><!-- /.shopping-cart -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /#top-banner-and-menu -->
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+
+    <script th:inline="javascript">
+        var origin = window.location.origin;
+
+        /*<![CDATA[*/
+        var from = /*[[${ from }]]*/ '';
+        var to = /*[[${ to }]]*/ '';
+        var status = /*[[${ status }]]*/ 'all';
+        /*]]>*/
+        var origin = window.location.origin;
+        $(document).ready(function () {
+            document.getElementById("date_from").value = from;
+            document.getElementById("date_to").value = to;
+            document.getElementById('select_status').value = status;
+            document.getElementById('date_from').max = new Date().toLocaleDateString('en-ca');
+            document.getElementById('date_to').max = new Date().toLocaleDateString('en-ca');
+        });
+        function filter() {
+            from = document.getElementById("date_from").value;
+            to = document.getElementById("date_to").value;
+            status = $("#select_status option:selected").val();
+            location.href = origin + "/user/order/get-all-sale?from=" + from + "&to=" + to + "&status=" + status;
+        }
+    </script>
+
+</body>
+
+</html>

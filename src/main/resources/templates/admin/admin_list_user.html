@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách user</title>
+    <div th:replace="fragment::head-custom"></div>
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="padding-top: 13px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <form th:action="@{/admin/user/get-all}" method="get">
+                            <div class="input-group">
+                                <input type="search" class="form-control form-control"
+                                    placeholder="Tìm người dùng theo tên đăng nhập, họ tên, email, số điện thoại"
+                                    id="search" name="search" th:value="${keyword}">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <!-- Default box -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách user</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped projects">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%">
+                                        #
+                                    </th>
+                                    <th style="width: 17%" class="text-center">
+                                        Ảnh đại diện
+                                    </th>
+                                    <th style="width: 17%">
+                                        Tên tài khoản
+                                    </th>
+                                    <th style="width: 18%">
+                                        Họ và tên
+                                    </th>
+                                    <th style="width: 17%">
+                                        Số điện thoại
+                                    </th>
+                                    <th style="width: 30%">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="item : ${list_user}" th:remove="tag">
+                                    <tr>
+                                        <td>
+                                            [[${item.id}]]
+                                        </td>
+                                        <td class="text-center">
+                                            <img alt="Avatar" class="table-avatar" th:src="@{${item.apiGetAvatar}}">
+                                        </td>
+                                        <td>
+                                            [[${item.username}]]
+                                        </td>
+                                        <td>
+                                            [[${item.fullName}]]
+                                        </td>
+                                        <td>
+                                            [[${item.cellphone}]]
+                                        </td>
+                                        <td class="project-actions text-right">
+                                            <a class="btn btn-primary btn-sm"
+                                                th:href="@{'/admin/user/view/' + ${item.id}}">
+                                                <i class="fas fa-folder">
+                                                </i>
+                                                Xem chi tiết
+                                            </a>
+                                            <a class="btn btn-info btn-sm"
+                                                th:href="@{'/admin/user/edit/' + ${item.id}}">
+                                                <i class="fas fa-pencil-alt">
+                                                </i>
+                                                Sửa
+                                            </a>
+                                            <a class="btn btn-danger btn-sm"
+                                                th:data-href="'/admin/user/delete/' + ${item.id}"
+                                                onclick="deleteMethod(this)">
+                                                <i class="fas fa-trash">
+                                                </i>
+                                                Xóa
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+        <!-- /.content -->
+        <!-- /.content-wrapper -->
+
+        <!-- paginate -->
+        <div th:replace="fragment::paginate('/admin/user/get-all', ${keyword}, ${current_page}, ${total_page})"></div>
+    </div>
+
+    <div th:replace="fragment::footer-admin"></div>
+
+    <div th:replace="fragment::script-custom"></div>
+
+</body>
+
+</html>

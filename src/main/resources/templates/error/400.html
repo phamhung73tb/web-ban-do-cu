@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lỗi</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <!-- <div th:replace="fragment::head-custom"></div> -->
+</head>
+
+<body class="cnt-home" style="font-family: 'Open Sans', sans-serif; font-size: 13px;">
+    <div th:replace="fragment::header-user"></div>
+    <div class="body-content outer-top-bd">
+        <div class="container">
+            <div class="x-page inner-bottom-sm">
+                <div class="row">
+                    <div class="col-md-12 x-text text-center">
+                        <h1>400</h1>
+                        <p>Không thể thực hiện yêu cầu của bạn. </p>
+                        <a th:href="@{/home}"><i class="fa fa-home"></i> Về trang chủ</a>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.sigin-in-->
+        </div><!-- /.container -->
+    </div>
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+</body>
+
+</html>

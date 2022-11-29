@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+
+    <title>Blog</title>
+
+    <div th:replace="fragment::head-custom2"></div>
+
+</head>
+
+<body class="cnt-home">
+    <!-- ============================================== HEADER ============================================== -->
+    <div th:replace="fragment::header-user"></div>
+
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs">
+        <div class="breadcrumb" style="font-size: 13px;">
+            <div class="container">
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li class="active">Tin tức</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="blog-page">
+                    <div class="col-md-12">
+                        <th:block th:each="blog : ${blogList}">
+                            <div class="blog-post  wow fadeInUp" style="margin-bottom: 50px">
+                                <a th:href="@{'/blog-detail/' + ${blog.id}}"><img class="img-responsive"
+                                        th:src="${blog.apiGetImage}" alt="" style="object-fit: contain;
+                                        width: 600px;
+                                        height: 309px;
+                                        margin-left: 50%;
+                                        transform: translate(-50%, 0%);"></a>
+                                <h1><a th:href="@{'/blog-detail/' + ${blog.id}}">[[${blog.title}]]</a>
+                                </h1>
+                                <span class="date-time">[[${blog.dateTime}]]</span>
+                                <div style="overflow: hidden;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                height: 100px;">
+                                    <p th:utext="${blog.content}"></p>
+                                </div>
+                                <a th:href="@{'/blog-detail/' + ${blog.id}}"
+                                    class="btn btn-upper btn-primary read-more">Xem thêm</a>
+                            </div>
+                        </th:block>
+
+                        <div class="clearfix blog-pagination filters-container  wow fadeInUp"
+                            style="padding:0px; background:none; box-shadow:none; margin-top:15px; border:none">
+
+                            <div class="text-right">
+                                <div class="pagination-container">
+                                    <ul class="list-inline list-unstyled">
+                                        <li th:if="${current_page > 1}" class="prev"><a
+                                            th:href="@{'/blog?page=' + ${current_page - 1}}"><i
+                                                class="fa fa-angle-left"></i></a></li>
+                                    <li th:unless="${current_page > 1}" class="prev"><a><i
+                                                class="fa fa-angle-left"></i></a></li>
+                                    <th:block th:if="${total_page != 0}"
+                                        th:each="i: ${#numbers.sequence(1, total_page)}">
+                                        <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
+                                        <li th:unless="${i == current_page}"><a
+                                                th:href="@{'/blog?page=' + ${i}}">[[${i}]]</a>
+                                        </li>
+                                    </th:block>
+                                    <li th:if="${total_page > current_page}" class="next"><a
+                                            th:href="@{'/blog?page=' + ${current_page + 1}}"><i
+                                                class="fa fa-angle-right"></i></a></li>
+                                    <li th:unless="${total_page > current_page}" class="next"><a><i
+                                                class="fa fa-angle-right"></i></a></li>
+                                    </ul><!-- /.list-inline -->
+                                </div><!-- /.pagination-container -->
+                            </div><!-- /.text-right -->
+
+                        </div><!-- /.filters-container -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================= FOOTER ============================================================= -->
+    <div th:replace="fragment::footer-user"></div>
+    <!-- ============================================================= FOOTER : END============================================================= -->
+
+    <div th:replace="fragment::script-custom2"></div>
+
+
+
+</body>
+
+</html>

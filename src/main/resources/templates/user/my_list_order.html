@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Danh sách đơn hàng</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+    </style>
+</head>
+
+<body class="cnt-home">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs" id="top-banner-and-menu">
+        <div class="breadcrumb" style="font-size: 13px;">
+            <div class="container">
+                <div class="breadcrumb-inner">
+                    <ul class="list-inline list-unstyled">
+                        <li style="display: inline;"><a th:href="@{/home}">Trang chủ</a></li>
+                        <li class="active">Danh sách đơn mua</li>
+                    </ul>
+                </div><!-- /.breadcrumb-inner -->
+            </div><!-- /.container -->
+        </div>
+        <div class="container" style="font-size: 13px">
+            <div class="row">
+                <div class="shopping-cart">
+                    <div class="col col-sm-6 col-md-12 text-right">
+                        <div class="pagination-container">
+                            <ul class="list-inline list-unstyled">
+                                <li th:if="${current_page > 1}" class="prev"><a
+                                        th:href="@{'/user/order/get-all?page=' + ${current_page - 1}}"><i
+                                            class="fa fa-angle-left"></i></a></li>
+                                <li th:unless="${current_page > 1}" class="prev"><a><i class="fa fa-angle-left"></i></a>
+                                </li>
+                                <th:block th:if="${total_page != 0}" th:each="i: ${#numbers.sequence(1, total_page)}">
+                                    <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
+                                    <li th:unless="${i == current_page}"><a
+                                            th:href="@{'/user/order/get-all?page=' + ${i}}">[[${i}]]</a>
+                                    </li>
+                                </th:block>
+                                <li th:if="${total_page > current_page}" class="next"><a
+                                        th:href="@{'/user/order/get-all?page=' + ${current_page + 1}}"><i
+                                            class="fa fa-angle-right"></i></a></li>
+                                <li th:unless="${total_page > current_page}" class="next"><a><i
+                                            class="fa fa-angle-right"></i></a></li>
+                            </ul><!-- /.list-inline -->
+                        </div>
+                        <!-- /.pagination-container -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row ">
+                <div class="shopping-cart">
+                    <div class="shopping-cart-table ">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="cart-romove item">Tên sản phẩm</th>
+                                        <th class="cart-total last-item">Tổng tiền</th>
+                                        <th class="cart-product-name item">Ngày đặt</th>
+                                        <th class="cart-edit item">Trạng thái</th>
+                                        <th class="cart-edit item">Xác nhận</th>
+                                        <th class="cart-edit item" style="width: 88px;">Chi tiết</th>
+                                    </tr>
+                                </thead><!-- /thead -->
+                                <tbody style="font-size: 14px;">
+                                    <tr th:if="${0 >= list_order.size()}" class="text-center">
+                                        <td colspan="5"> Bạn chưa có đơn hàng nào !!!</td>
+                                    </tr>
+                                    <th:block th:each="order : ${list_order}">
+                                        <tr>
+                                            <td class="cart-product-name-info">
+                                                <a
+                                                    th:href="@{'/product/' + ${order.productResponse.slug}}">[[${order.productResponse.name}]]</a>
+                                            </td>
+                                            <td class="cart-product-sub-total">
+                                                <span class="cart-sub-total-price" style="font-size: 14px;">
+                                                    [[${#numbers.formatDecimal(order.priceProduct,0,'COMMA', 0,
+                                                    'POINT')}]]
+                                                </span>
+                                            </td>
+                                            <td class="romove-item"><span>[[${order.createTime}]]</span></td>
+                                            </td>
+                                            <td class="cart-image text-center"><span>[[${order.status}]]</span></td>
+                                            <td class="cart-image text-center">
+                                                <a th:if="${order.status == 'Chờ giao hàng'}"
+                                                    th:href="@{'/user/order/completed/' + ${order.id}}"
+                                                    class="btn btn-sm btn-primary" style="text-decoration: none;">Đã
+                                                    nhận</a>
+                                                <a th:unless="${order.status == 'Chờ giao hàng'}"
+                                                    class="btn btn-sm btn-primary disabled"
+                                                    style="text-decoration: none;">Đã nhận</a>
+                                            </td>
+                                            <td class="cart-product-name-info">
+                                                <a th:href="@{'/user/order/' + ${order.id}}"><i
+                                                        class="fa-solid fa-arrow-right"></i></a></h4>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                </tbody><!-- /tbody -->
+                            </table><!-- /table -->
+                        </div>
+                    </div><!-- /.shopping-cart-table -->
+                </div><!-- /.shopping-cart -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /#top-banner-and-menu -->
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+
+    <script>
+        var origin = window.location.origin;
+
+        $(document).ready(function () {
+
+        });
+    </script>
+</body>
+
+</html>

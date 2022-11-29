@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Home</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+        .sidebar .side-menu nav .nav>li {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            -webkit-transition: none;
+            -moz-transition: none;
+            -o-transition: none;
+            transition: none;
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        li.menu-hover_:hover {
+            background-color: rgb(235, 235, 235);
+        }
+
+        .menu-hover_:hover>.dropdown-menu {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="cnt-home">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs" id="top-banner-and-menu">
+        <div class="container">
+            <div class="row">
+                <!-- ============================================== SIDEBAR ============================================== -->
+                <div class="col-xs-12 col-sm-12 col-md-3 sidebar">
+
+                    <!-- ================================== Danh mục ================================== -->
+                    <div class="side-menu animate-dropdown outer-bottom-xs">
+                        <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Danh mục</div>
+                        <nav class="yamm megamenu-horizontal" id="menu_" style="font-size: 13px;">
+                            <ul class="nav" xmlns:th="https://www.thymeleaf.org">
+                                <th:block th:each="category: ${menuResponse}">
+                                    <li class="dropdown menu-item menu-hover_"> <a
+                                            th:href="@{'/category/' + ${category.key.slug}}" class="dropdown-toggle"><i
+                                                class="icon fa fa-shopping-bag" aria-hidden="true"></i><span
+                                                style="font-size: 13px;"
+                                                th:text="${category.key.name} ?: _">Lỗi</span></a>
+                                        <ul class="dropdown-menu mega-menu">
+                                            <li class="yamm-content">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <ul class="links list-unstyled">
+                                                            <th:block th:each="childCategory: ${category.value}">
+                                                                <li><a
+                                                                        th:href="@{'/category/' + ${childCategory.slug}}"><span
+                                                                            th:text="${childCategory.name} ?: _">Lỗi</span></a>
+                                                                </li>
+                                                            </th:block>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- /.col -->
+                                                </div>
+                                                <!-- /.row -->
+                                            </li>
+                                            <!-- /.yamm-content -->
+                                        </ul>
+                                        <!-- /.dropdown-menu -->
+                                    </li>
+                                    <!-- /.menu-item -->
+                                </th:block>
+                            </ul>
+                            <!-- /.nav -->
+                        </nav>
+                        <!-- /.megamenu-horizontal -->
+                    </div>
+                    <!-- /.side-menu -->
+                    <!-- ================================== TOP NAVIGATION : END ================================== -->
+                    <!-- ============================================== Có thể bạn quan tâm ============================================== -->
+
+                    <div class="sidebar-widget outer-bottom-small wow fadeInUp">
+                        <h3 class="section-title">Sản phẩm mới</h3>
+                        <div class="sidebar-widget-body outer-top-xs">
+                            <div
+                                class="owl-carousel sidebar-carousel special-offer custom-carousel owl-theme outer-top-xs">
+                                <th:block th:each="i: ${#numbers.sequence(0, 2)}">
+                                    <div th:if="${newProductList.size() - 1 &gt;= (3*i)}" class="owl-item"
+                                        style="width: 223px;">
+                                        <div class="item">
+                                            <div class="products special-product">
+                                                <div class="product">
+                                                    <div class="product-micro">
+                                                        <div class="row product-micro-row">
+                                                            <div class="col col-xs-5">
+                                                                <div class="product-image">
+                                                                    <div class="image"> <a
+                                                                            th:href="@{'/product/' + ${newProductList[3*i].slug}}">
+                                                                            <img th:src="${newProductList[3*i].mainImage}"
+                                                                                alt=""
+                                                                                style="object-fit:contain;width:90px;height:90px;">
+                                                                        </a> </div>
+                                                                    <!-- /.image -->
+
+                                                                </div>
+                                                                <!-- /.product-image -->
+                                                            </div>
+                                                            <!-- /.col -->
+                                                            <div class="col col-xs-7">
+                                                                <div class="product-info">
+                                                                    <h3 class="name" style="max-width: 130px;" th:title="${newProductList[3*i].name}">
+                                                                        <a th:href="@{'/product/' + ${newProductList[3*i].slug}}">[[${randomProductList[3*i].name}]]</a>
+                                                                    </h3>
+                                                                    <div class="product-price"> <span class="price">
+                                                                            [[${#numbers.formatDecimal(randomProductList[3*i].price,
+                                                                            0, 'COMMA', 0, 'POINT')}]] VNĐ
+                                                                        </span> </div>
+                                                                    <!-- /.product-price -->
+
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.col -->
+                                                        </div>
+                                                        <!-- /.product-micro-row -->
+                                                    </div>
+                                                    <!-- /.product-micro -->
+
+                                                </div>
+                                                <div th:if="${newProductList.size() - 1 &gt;= (3*i + 1)}"
+                                                    class="product">
+                                                    <div class="product-micro">
+                                                        <div class="row product-micro-row">
+                                                            <div class="col col-xs-5">
+                                                                <div class="product-image">
+                                                                    <div class="image"> <a
+                                                                            th:href="@{'/product/' + ${newProductList[3*i+1].slug}}">
+                                                                            <img th:src="${newProductList[3*i+1].mainImage}"
+                                                                                alt=""
+                                                                                style="object-fit:contain;width:90px;height:90px;">
+                                                                        </a> </div>
+                                                                    <!-- /.image -->
+
+                                                                </div>
+                                                                <!-- /.product-image -->
+                                                            </div>
+                                                            <!-- /.col -->
+                                                            <div class="col col-xs-7">
+                                                                <div class="product-info">
+                                                                    <h3 class="name" style="max-width: 130px;"  th:title="${newProductList[3*i+1].name}"><a
+                                                                            th:href="@{'/product/' + ${newProductList[3*i+1].slug}}">[[${randomProductList[3*i+1].name}]]</a>
+                                                                    </h3>
+                                                                    <div class="product-price"> <span class="price">
+                                                                            [[${#numbers.formatDecimal(randomProductList[3*i+1].price,
+                                                                            0, 'COMMA', 0, 'POINT')}]] VNĐ
+                                                                        </span> </div>
+                                                                    <!-- /.product-price -->
+
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.col -->
+                                                        </div>
+                                                        <!-- /.product-micro-row -->
+                                                    </div>
+                                                    <!-- /.product-micro -->
+                                                </div>
+                                                <div th:if="${newProductList.size() - 1 &gt;= (3*i + 2)}"
+                                                    class="product">
+                                                    <div class="product-micro">
+                                                        <div class="row product-micro-row">
+                                                            <div class="col col-xs-5">
+                                                                <div class="product-image">
+                                                                    <div class="image"> <a
+                                                                            th:href="@{'/product/' + ${newProductList[3*i+2].slug}}">
+                                                                            <img th:src="${newProductList[3*i+2].mainImage}"
+                                                                                alt=""
+                                                                                style="object-fit:contain;width:90px;height:90px;">
+                                                                        </a> </div>
+                                                                    <!-- /.image -->
+
+                                                                </div>
+                                                                <!-- /.product-image -->
+                                                            </div>
+                                                            <!-- /.col -->
+                                                            <div class="col col-xs-7">
+                                                                <div class="product-info">
+                                                                    <h3 class="name" style="max-width: 130px;"  th:title="${newProductList[3*i+2].name}"><a
+                                                                            th:href="@{'/product/' + ${newProductList[3*i+2].slug}}">[[${randomProductList[3*i+2].name}]]</a>
+                                                                    </h3>
+                                                                    <div class="product-price"> <span class="price">
+                                                                            [[${#numbers.formatDecimal(randomProductList[3*i+2].price,
+                                                                            0, 'COMMA', 0, 'POINT')}]] VNĐ
+                                                                        </span> </div>
+                                                                    <!-- /.product-price -->
+
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.col -->
+                                                        </div>
+                                                        <!-- /.product-micro-row -->
+                                                    </div>
+                                                    <!-- /.product-micro -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                        <!-- /.sidebar-widget-body -->
+                    </div>
+                    <!-- /.sidebar-widget -->
+                    <!-- ============================================== SPECIAL OFFER : END ============================================== -->
+                    <!-- ============================================== Từ khóa tìm kiếm ============================================== -->
+                    <div class="sidebar-widget product-tag wow fadeInUp" style="font-size: 13px;">
+                        <h3 class="section-title">Từ khóa tìm kiếm nhiều nhất</h3>
+                        <div class="sidebar-widget-body outer-top-xs">
+                            <div class="tag-list"> <a class="item" th:href="@{/search?keyword=điện thoại cũ}">Điện thoại
+                                    cũ</a> <a class="item active" th:href="@{/search?keyword=iphone}">Iphone</a> <a
+                                    class="item" title="Smartphone"
+                                    th:href="@{/search?keyword=smartphone}">Smartphone</a> <a class="item"
+                                    th:href="@{/search?keyword=sơ mi}">Sơ mi</a> <a class="item"
+                                    th:href="@{/search?keyword=tu lạnh}">Tủ lạnh</a> <a class="item"
+                                    th:href="@{/search?keyword=kệ gỗ}">Kệ gỗ</a> <a class="item"
+                                    th:href="@{/search?keyword=giày thể thao}">Giày thể thao</a> <a class="item"
+                                    th:href="@{/search?keyword=hunter x hunter}">Hunter x Hunter</a> </div>
+                            <!-- /.tag-list -->
+                        </div>
+                        <!-- /.sidebar-widget-body -->
+                    </div>
+                    <!-- /.sidebar-widget -->
+                    <!-- ============================================== PRODUCT TAGS : END ============================================== -->
+                    <!-- ============================================== Sản phẩm nổi bật ============================================== -->
+
+                    <div class="sidebar-widget outer-bottom-small wow fadeInUp">
+                        <h3 class="section-title">Sản phẩm nổi bật</h3>
+                        <div class="sidebar-widget-body outer-top-xs">
+                            <div
+                                class="owl-carousel sidebar-carousel special-offer custom-carousel owl-theme outer-top-xs">
+                                <div class="item">
+                                    <div class="products special-product">
+                                        <th:block th:each="product : ${hotProductList}">
+                                            <div class="product">
+                                                <div class="product-micro">
+                                                    <div class="row product-micro-row">
+                                                        <div class="col col-xs-5">
+                                                            <div class="product-image">
+                                                                <div class="image"> <a
+                                                                        th:href="@{'/product/' + ${product.slug}}"> <img
+                                                                            th:src="${product.mainImage}" alt="">
+                                                                    </a> </div>
+                                                                <!-- /.image -->
+
+                                                            </div>
+                                                            <!-- /.product-image -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                        <div class="col col-xs-7">
+                                                            <div class="product-info">
+                                                                <h3 class="name" style="max-width: 130px;"  th:title="${product.name}"><a
+                                                                        th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
+                                                                </h3>
+                                                                <div class="product-price"> <span class="price">
+                                                                        [[${#numbers.formatDecimal(product.price, 0,
+                                                                        'COMMA', 0, 'POINT')}]] VNĐ
+                                                                    </span> </div>
+                                                                <!-- /.product-price -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.col -->
+                                                    </div>
+                                                    <!-- /.product-micro-row -->
+                                                </div>
+                                                <!-- /.product-micro -->
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.sidebar-widget-body -->
+                    </div>
+                    <!-- /.sidebar-widget -->
+                    <!-- ============================================== SPECIAL DEALS : END ============================================== -->
+                </div>
+                <!-- /.sidemenu-holder -->
+                <!-- ============================================== SIDEBAR : END ============================================== -->
+
+                <!-- ============================================== CONTENT ============================================== -->
+                <div class="col-xs-12 col-sm-12 col-md-9 homebanner-holder">
+                    <!-- ========================================== Slide ========================================= -->
+
+                    <div id="hero">
+                        <div id="owl-main" class="owl-carousel owl-inner-nav owl-ui-sm">
+                            <th:block th:each="slide : ${slideResponseList}">
+                                <div class="item"
+                                    th:style="'background-image: url('+ ${slide.apiGetImage} + ');' + 'background-size: contain; background-repeat: no-repeat'">
+                                    <div class="container-fluid">
+                                        <div class="caption bg-color vertical-center text-left" style="top: 50%">
+                                            <div class="slider-header fadeInDown-1">[[${slide.title}]]</div>
+                                            <div class="big-text fadeInDown-1" style="color: red;"> [[${slide.titleStrong}]] </div>
+                                            <div class="button-holder fadeInDown-3"> <a th:href="${slide.link}"
+                                                    class="btn-lg btn btn-uppercase btn-primary shop-now-button">Xem thêm</a>
+                                            </div>
+                                        </div>
+                                        <!-- /.caption -->
+                                    </div>
+                                    <!-- /.container-fluid -->
+                                </div>
+                                <!-- /.item -->
+                            </th:block>
+                        </div>
+                        <!-- /.owl-carousel -->
+                    </div>
+
+                    <!-- ========================================= SECTION – HERO : END ========================================= -->
+
+                    <!-- ============================================== Tiêu đề bên dưới slide ============================================== -->
+                    <div class="info-boxes wow fadeInUp">
+                        <div class="info-boxes-inner">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-4 col-lg-4">
+                                    <div class="info-box">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h4 class="info-box-heading green">Hoàn tiền</h4>
+                                            </div>
+                                        </div>
+                                        <h6 class="text">Chậm nhất 7 ngày</h6>
+                                    </div>
+                                </div>
+                                <!-- .col -->
+
+                                <div class="hidden-md col-sm-4 col-lg-4">
+                                    <div class="info-box">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h4 class="info-box-heading green">Giao hàng</h4>
+                                            </div>
+                                        </div>
+                                        <h6 class="text">Toàn quốc</h6>
+                                    </div>
+                                </div>
+                                <!-- .col -->
+
+                                <div class="col-md-6 col-sm-4 col-lg-4">
+                                    <div class="info-box">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h4 class="info-box-heading green">Giao dịch</h4>
+                                            </div>
+                                        </div>
+                                        <h6 class="text">An toàn</h6>
+                                    </div>
+                                </div>
+                                <!-- .col -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.info-boxes-inner -->
+
+                    </div>
+                    <!-- /.info-boxes -->
+                    <!-- ============================================== INFO BOXES : END ============================================== -->
+                    <!-- ============================================== Sản phẩm mới ============================================== -->
+                    <div class="scroll-tabs outer-top-vs wow fadeInUp">
+                        <div class="more-info-tab clearfix ">
+                            <h3 class="new-product-title pull-left">Sản phẩm dề xuất</h3>
+                            <!-- /.nav-tabs -->
+                        </div>
+                        <div class="tab-content outer-top-xs">
+                            <div class="tab-pane in active" id="all">
+                                <div class="product-slider">
+                                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme" data-item="4">
+                                        <th:block th:each="productResponse : ${getProductRecommendInHomePage}">
+                                            <div class="item item-carousel">
+                                                <div class="products">
+                                                    <div class="product">
+                                                        <div class="product-image">
+                                                            <div class="image"> <a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
+                                                                        th:src="${productResponse.mainImage}" alt=""
+                                                                        style="object-fit:contain;width:189px;height:189px;"></a>
+                                                            </div>
+                                                            <!-- /.image -->
+
+                                                            <div class="tag new"><span>Mới</span></div>
+                                                        </div>
+                                                        <!-- /.product-image -->
+
+                                                        <div class="product-info text-left">
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
+                                                            </h3>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                    [[${#numbers.formatDecimal(productResponse.price, 0,
+                                                                    'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                            </div>
+                                                            <!-- /.product-price -->
+                                                        </div>
+                                                        <!-- /.product-info -->
+                                                        <div class="cart clearfix animate-effect"
+                                                            style="display: flex; justify-content: center; left: 0; margin-left: 0;">
+                                                            <div class="action">
+                                                                <ul class="list-unstyled">
+                                                                    <li class="add-cart-button btn-group">
+                                                                        <a data-toggle="tooltip"
+                                                                            class="btn btn-primary icon" type="button"
+                                                                            title="Mua ngay"
+                                                                            th:href="@{'/user/order/create/' + ${productResponse.id}}">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="lnk wishlist">
+                                                                        <a data-toggle="tooltip" class="add-to-cart"
+                                                                            th:data-id="${productResponse.id}"
+                                                                            onclick="addWishlist(this)"
+                                                                            title="Wishlist">
+                                                                            <i class="icon fa fa-heart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- /.action -->
+                                                        </div>
+                                                        <!-- /.cart -->
+                                                    </div>
+                                                    <!-- /.product -->
+
+                                                </div>
+                                                <!-- /.products -->
+                                            </div>
+                                        </th:block>
+                                        <!-- /.item -->
+                                    </div>
+                                    <!-- /.home-owl-carousel -->
+                                </div>
+                                <!-- /.product-slider -->
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                    <!-- /.scroll-tabs -->
+                    <!-- ============================================== SCROLL TABS : END ============================================== -->
+
+                    <!-- ============================================== sản phẩm theo danh mục ============================================== -->
+                    <div id="product-tabs-slider" class="scroll-tabs outer-top-vs wow fadeInUp">
+                        <div class="more-info-tab clearfix ">
+                            <h3 class="new-product-title pull-left">Sản phẩm theo danh mục</h3>
+                            <ul class="nav nav-tabs nav-tab-line pull-right" id="new-products-1">
+                                <li class="active"><a data-transition-type="backSlide" href="#all_"
+                                        data-toggle="tab">Tất cả</a></li>
+                                <li><a data-transition-type="backSlide" href="#quanao" data-toggle="tab">Quần áo</a>
+                                </li>
+                                <li><a data-transition-type="backSlide" href="#dodientu" data-toggle="tab">Đồ điện
+                                        tử</a>
+                                </li>
+                                <li><a data-transition-type="backSlide" href="#sachtruyen" data-toggle="tab">Sách
+                                        truyện</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-tabs -->
+                        </div>
+                        <div class="tab-content outer-top-xs">
+                            <div class="tab-pane in active" id="all_">
+                                <div class="product-slider">
+                                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme" data-item="4">
+                                        <th:block th:each="productResponse : ${randomAllProductList}">
+                                            <div class="item item-carousel">
+                                                <div class="products">
+                                                    <div class="product">
+                                                        <div class="product-image">
+                                                            <div class="image"> <a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
+                                                                        th:src="${productResponse.mainImage}" alt=""
+                                                                        style="object-fit:contain;width:189px;height:189px;"></a>
+                                                            </div>
+                                                            <!-- /.image -->
+
+                                                            <div th:if="${productResponse.tag == 'New'}"
+                                                                class="tag new">
+                                                                <span>Mới</span>
+                                                            </div>
+                                                            <div th:if="${productResponse.tag == 'Hot'}"
+                                                                class="tag hot">
+                                                                <span>Hot</span>
+                                                            </div>
+                                                            <div th:if="${productResponse.tag == 'Đã bán'}"
+                                                                class="tag hot">
+                                                                <span>Đã bán</span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.product-image -->
+
+                                                        <div class="product-info text-left">
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
+                                                            </h3>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                    [[${#numbers.formatDecimal(productResponse.price, 0,
+                                                                    'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                            </div>
+                                                            <!-- /.product-price -->
+                                                        </div>
+                                                        <!-- /.product-info -->
+                                                        <div class="cart clearfix animate-effect"
+                                                            style="display: flex; justify-content: center; left: 0; margin-left: 0;">
+                                                            <div class="action">
+                                                                <ul class="list-unstyled">
+                                                                    <li class="add-cart-button btn-group">
+                                                                        <a data-toggle="tooltip"
+                                                                            class="btn btn-primary icon" type="button"
+                                                                            title="Mua ngay"
+                                                                            th:href="@{'/user/order/create/' + ${productResponse.id}}">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="lnk wishlist">
+                                                                        <a data-toggle="tooltip" class="add-to-cart"
+                                                                            th:data-id="${productResponse.id}"
+                                                                            onclick="addWishlist(this)"
+                                                                            title="Wishlist">
+                                                                            <i class="icon fa fa-heart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- /.action -->
+                                                        </div>
+                                                        <!-- /.cart -->
+                                                    </div>
+                                                    <!-- /.product -->
+                                                </div>
+                                                <!-- /.products -->
+                                            </div>
+                                            <!-- /.item -->
+                                        </th:block>
+
+                                    </div>
+                                    <!-- /.home-owl-carousel -->
+                                </div>
+                                <!-- /.product-slider -->
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="quanao">
+                                <div class="product-slider">
+                                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme">
+                                        <th:block th:each="productResponse : ${randomQuanAoList}">
+                                            <div class="item item-carousel">
+                                                <div class="products">
+                                                    <div class="product">
+                                                        <div class="product-image">
+                                                            <div class="image"> <a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
+                                                                        th:src="${productResponse.mainImage}" alt=""
+                                                                        style="object-fit:contain;width:189px;height:189px;"></a>
+                                                            </div>
+                                                            <!-- /.image -->
+
+                                                            <div th:if="${productResponse.tag == 'New'}"
+                                                                class="tag new">
+                                                                <span>Mới</span>
+                                                            </div>
+                                                            <div th:if="${productResponse.tag == 'Hot'}"
+                                                                class="tag hot">
+                                                                <span>Hot</span>
+                                                            </div>
+                                                            <div th:if="${productResponse.tag == 'Đã bán'}"
+                                                                class="tag hot">
+                                                                <span>Đã bán</span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.product-image -->
+
+                                                        <div class="product-info text-left">
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
+                                                            </h3>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                    [[${#numbers.formatDecimal(productResponse.price, 0,
+                                                                    'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                            </div>
+                                                            <!-- /.product-price -->
+
+                                                        </div>
+                                                        <!-- /.product-info -->
+                                                        <div class="cart clearfix animate-effect"
+                                                            style="display: flex; justify-content: center; left: 0; margin-left: 0;">
+                                                            <div class="action">
+                                                                <ul class="list-unstyled">
+                                                                    <li class="add-cart-button btn-group">
+                                                                        <a data-toggle="tooltip"
+                                                                            class="btn btn-primary icon" type="button"
+                                                                            title="Mua ngay"
+                                                                            th:href="@{'/user/order/create/' + ${productResponse.id}}">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="lnk wishlist">
+                                                                        <a data-toggle="tooltip" class="add-to-cart"
+                                                                            th:data-id="${productResponse.id}"
+                                                                            onclick="addWishlist(this)"
+                                                                            title="Wishlist">
+                                                                            <i class="icon fa fa-heart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- /.action -->
+                                                        </div>
+                                                        <!-- /.cart -->
+                                                    </div>
+                                                    <!-- /.product -->
+                                                </div>
+                                                <!-- /.products -->
+                                            </div>
+                                            <!-- /.item -->
+                                        </th:block>
+
+                                    </div>
+                                    <!-- /.home-owl-carousel -->
+                                </div>
+                                <!-- /.product-slider -->
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="dodientu">
+                                <div class="product-slider">
+                                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme">
+                                        <th:block th:each="productResponse : ${randomQuanDoDienTuList}">
+                                            <div class="item item-carousel">
+                                                <div class="products">
+                                                    <div class="product">
+                                                        <div class="product-image">
+                                                            <div class="image"> <a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
+                                                                        th:src="${productResponse.mainImage}" alt=""
+                                                                        style="object-fit:contain;width:189px;height:189px;"></a>
+                                                            </div>
+                                                            <!-- /.image -->
+
+                                                            <div th:if="${productResponse.tag == 'New'}"
+                                                                class="tag new">
+                                                                <span>Mới</span>
+                                                            </div>
+                                                            <div th:if="${productResponse.tag == 'Hot'}"
+                                                                class="tag hot">
+                                                                <span>Hot</span>
+                                                            </div>
+                                                            <div th:if="${productResponse.tag == 'Đã bán'}"
+                                                                class="tag hot">
+                                                                <span>Đã bán</span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.product-image -->
+
+                                                        <div class="product-info text-left">
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
+                                                            </h3>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                    [[${#numbers.formatDecimal(productResponse.price, 0,
+                                                                    'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                            </div>
+                                                            <!-- /.product-price -->
+
+                                                        </div>
+                                                        <!-- /.product-info -->
+                                                        <div class="cart clearfix animate-effect"
+                                                            style="display: flex; justify-content: center; left: 0; margin-left: 0;">
+                                                            <div class="action">
+                                                                <ul class="list-unstyled">
+                                                                    <li class="add-cart-button btn-group">
+                                                                        <a data-toggle="tooltip"
+                                                                            class="btn btn-primary icon" type="button"
+                                                                            title="Mua ngay"
+                                                                            th:href="@{'/user/order/create/' + ${productResponse.id}}">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="lnk wishlist">
+                                                                        <a data-toggle="tooltip" class="add-to-cart"
+                                                                            th:data-id="${productResponse.id}"
+                                                                            onclick="addWishlist(this)"
+                                                                            title="Wishlist">
+                                                                            <i class="icon fa fa-heart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- /.action -->
+                                                        </div>
+                                                        <!-- /.cart -->
+                                                    </div>
+                                                    <!-- /.product -->
+                                                </div>
+                                                <!-- /.products -->
+                                            </div>
+                                            <!-- /.item -->
+                                        </th:block>
+
+                                    </div>
+                                    <!-- /.home-owl-carousel -->
+                                </div>
+                                <!-- /.product-slider -->
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane" id="sachtruyen">
+                                <div class="product-slider">
+                                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme">
+                                        <th:block th:each="productResponse : ${randomSachTruyenList}">
+                                            <div class="item item-carousel">
+                                                <div class="products">
+                                                    <div class="product">
+                                                        <div class="product-image">
+                                                            <div class="image"> <a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}"><img
+                                                                        th:src="${productResponse.mainImage}" alt=""
+                                                                        style="object-fit:contain;width:189px;height:189px;"></a>
+                                                            </div>
+                                                            <!-- /.image -->
+
+                                                            <div th:if="${productResponse.tag == 'New'}"
+                                                                class="tag new">
+                                                                <span>Mới</span>
+                                                            </div>
+                                                            <div th:if="${productResponse.tag == 'Hot'}"
+                                                                class="tag hot">
+                                                                <span>Hot</span>
+                                                            </div>
+                                                            <div th:if="${productResponse.tag == 'Đã bán'}"
+                                                                class="tag hot">
+                                                                <span>Đã bán</span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.product-image -->
+
+                                                        <div class="product-info text-left">
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${productResponse.name}"><a
+                                                                    th:href="@{'/product/' + ${productResponse.slug}}">[[${productResponse.name}]]</a>
+                                                            </h3>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                    [[${#numbers.formatDecimal(productResponse.price, 0,
+                                                                    'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                            </div>
+                                                            <!-- /.product-price -->
+
+                                                        </div>
+                                                        <!-- /.product-info -->
+                                                        <div class="cart clearfix animate-effect"
+                                                            style="display: flex; justify-content: center; left: 0; margin-left: 0;">
+                                                            <div class="action">
+                                                                <ul class="list-unstyled">
+                                                                    <li class="add-cart-button btn-group">
+                                                                        <a data-toggle="tooltip"
+                                                                            class="btn btn-primary icon" type="button"
+                                                                            title="Mua ngay"
+                                                                            th:href="@{'/user/order/create/' + ${productResponse.id}}">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="lnk wishlist">
+                                                                        <a data-toggle="tooltip" class="add-to-cart"
+                                                                            th:data-id="${productResponse.id}"
+                                                                            onclick="addWishlist(this)"
+                                                                            title="Wishlist">
+                                                                            <i class="icon fa fa-heart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- /.action -->
+                                                        </div>
+                                                        <!-- /.cart -->
+                                                    </div>
+                                                    <!-- /.product -->
+                                                </div>
+                                                <!-- /.products -->
+                                            </div>
+                                            <!-- /.item -->
+                                        </th:block>
+
+                                    </div>
+                                    <!-- /.home-owl-carousel -->
+                                </div>
+                                <!-- /.product-slider -->
+                            </div>
+                            <!-- /.tab-pane -->
+
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                    <!-- /.scroll-tabs -->
+                    <!-- ============================================== SCROLL TABS : END ============================================== -->
+                    <!-- ============================================== BLOG SLIDER ============================================== -->
+                    <section class="section latest-blog outer-bottom-vs wow fadeInUp">
+                        <h3 class="section-title">Tin tức mới</h3>
+                        <div class="blog-slider-container outer-top-xs">
+                            <div class="owl-carousel blog-slider custom-carousel">
+                                <th:block th:each="blog : ${blogResponseList}">
+                                    <div class="item">
+                                        <div class="blog-post">
+                                            <div class="blog-post-image">
+                                                <div class="image"> <a th:href="@{'/blog-detail/' + ${blog.id}}"><img
+                                                            th:src="${blog.apiGetImage}" alt="" style="object-fit:contain;width:390px;height:200px; margin-left: 50%;
+                                                            transform: translate(-50%, 0%);"></a> </div>
+                                            </div>
+                                            <!-- /.blog-post-image -->
+
+                                            <div class="blog-post-info text-left">
+                                                <h3 class="name"><a
+                                                        th:href="@{'/blog-detail/' + ${blog.id}}">[[${blog.title}]]</a>
+                                                </h3>
+                                                <span class="info">[[${blog.dateTime}]] </span>
+                                                <div style="overflow: hidden;
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                height: 30px; font-size: 13px;">
+                                                    <p th:utext="${blog.content}">
+                                                    <p th:utext="${blog.content}"></p>
+                                                </div>
+                                                <a th:href="@{'/blog-detail/' + ${blog.id}}"
+                                                    class="lnk btn btn-primary">Xem tin</a>
+                                            </div>
+                                            <!-- /.blog-post-info -->
+
+                                        </div>
+                                        <!-- /.blog-post -->
+                                    </div>
+                                    <!-- /.item -->
+                                </th:block>
+                            </div>
+                            <!-- /.owl-carousel -->
+                        </div>
+                        <!-- /.blog-slider-container -->
+                    </section>
+                    <!-- /.section -->
+                    <!-- ============================================== BLOG SLIDER : END ============================================== -->
+                </div>
+                <!-- /.homebanner-holder -->
+                <!-- ============================================== CONTENT : END ============================================== -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /#top-banner-and-menu -->
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+
+    <script>
+        var origin = window.location.origin;
+
+        $(document).ready(function () {
+
+        });
+    </script>
+</body>
+
+</html>

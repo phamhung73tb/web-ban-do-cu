@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Chi tiết sản phẩm</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        .swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #000;
+        }
+
+        .swiper-slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            -ms-transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
+    </style>
+</head>
+
+<body class="cnt-home">
+    <div th:replace="fragment::header-user"></div>
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs">
+        <div class="container">
+            <div class="row single-product">
+                <div class="col-md-12">
+                    <div class="detail-block">
+                        <div class="row  wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">
+
+                            <div class="col-xs-12 col-sm-6 col-md-5 gallery-holder">
+                                <div>
+                                    <div style="height: 317px;">
+                                        <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+                                            class="swiper mySwiper">
+                                            <div class="swiper-wrapper">
+                                                <th:block th:each="imageProduct : ${productResponse.apiGetImageList}">
+                                                    <div class="swiper-slide">
+                                                        <img th:data-src="${imageProduct.apiGetImage}"
+                                                            class="swiper-lazy"
+                                                            style="object-fit:contain; width:317px;height:317px;" />
+                                                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white">
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                            <div class="swiper-pagination"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /.gallery-holder -->
+                            <div class="col-sm-6 col-md-7 product-info-block">
+                                <div class="product-info">
+                                    <h1 class="name">[[${productResponse.name}]]</h1>
+                                    <div class="stock-container info-container m-t-10">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <div class="stock-box">
+                                                    <span class="label">Trạng thái :</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <div class="stock-box">
+                                                    <span th:if="${productResponse.status == 'Đang bán'}" class="value">[[${productResponse.status}]]</span>
+                                                    <span th:if="${productResponse.status == 'Đã bán' || productResponse.status == 'Đã thanh toán cho người bán'}" class="value">Đã bán</span>
+                                                    <span th:if="${productResponse.status == 'Chờ xác nhận'}" class="value">Đã có người đặt</span>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.row -->
+                                    </div><!-- /.stock-container -->
+                                    <div class="description-container m-t-20">
+                                        [[${productResponse.description}]]
+                                    </div><!-- /.description-container -->
+                                    <div class="price-container info-container m-t-20">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="price-box">
+                                                    <span class="price">[[${#numbers.formatDecimal(productResponse.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="favorite-button m-t-10">
+                                                    <a class="btn btn-primary" data-toggle="tooltip"
+                                                        data-placement="right" title=""
+                                                        th:data-id="${productResponse.id}" onclick="addWishlist(this)"
+                                                        data-original-title="Wishlist">
+                                                        <i class="fa fa-heart"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div><!-- /.row -->
+                                    </div><!-- /.price-container -->
+                                    <div class="quantity-container info-container">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <a th:if="${productResponse.status == 'Đang bán'}"
+                                                    th:href="@{'/user/order/create/' + ${productResponse.id}}"
+                                                    class="btn btn-primary"><i
+                                                        class="fa fa-shopping-cart inner-right-vs"></i>Mua
+                                                    ngay</a>
+                                            </div>
+                                        </div><!-- /.row -->
+                                    </div><!-- /.quantity-container -->
+                                </div><!-- /.product-info -->
+                            </div><!-- /.col-sm-7 -->
+                        </div><!-- /.row -->
+                    </div>
+
+                    <div class="product-tabs inner-bottom-xs  wow fadeInUp animated"
+                        style="visibility: visible; animation-name: fadeInUp;">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
+                                    <li class="active"><a data-toggle="tab" href="#description">Thông tin chi tiết</a>
+                                    </li>
+                                    <li><a data-toggle="tab" href="#review">Người bán</a></li>
+                                </ul><!-- /.nav-tabs #product-tabs -->
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="tab-content">
+                                    <div id="description" class="tab-pane in active">
+                                        <div class="product-tab">
+                                            <h2 class="heading-title" style="font-size: 15px;">Thông tin sản phẩm</h2>
+                                            <div class="form-group">
+                                                <label class="info-title">Loại sản phẩm:</label>
+                                                <div style="display: inline;">
+                                                    [[${productResponse.categoryResponse.name}]]
+                                                </div>
+                                            </div>
+                                            <div id="form-content_">
+                                                <form class="register-form outer-top-xs" role="form"
+                                                    id="formDetailProduct">
+                                                    <th:block
+                                                        th:each="property : ${productResponse.propertyResponseList}">
+                                                        <div class="form-group">
+                                                            <label class="info-title"
+                                                                th:text="${property.propertyName} + ':'">Lỗi</label>
+                                                            <div style="display: inline;">
+                                                                [[${property.value}]] [[${property.unit}]]
+                                                            </div>
+                                                        </div>
+                                                    </th:block>
+                                                    <div class="form-group">
+                                                        <label class="info-title">Tình trạng:</label>
+                                                        <div style="display: inline;">
+                                                            [[${productResponse.currentStatus}]]
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="margin-bottom: 50px;">
+                                                        <label class="info-title">Địa chỉ:</label>
+                                                        <div style="display: inline;">
+                                                            [[${productResponse.addressResponse.detail}]],
+                                                            [[${productResponse.addressResponse.commune}]],
+                                                            [[${productResponse.addressResponse.district}]],
+                                                            [[${productResponse.addressResponse.province}]]
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.tab-pane -->
+
+                                    <div id="review" class="tab-pane">
+                                        <div class="product-tag">
+                                            <h2 class="heading-title" style="text-align: left!important;text-transform: none!important;
+                                            padding: 0px 0px 15px 0px!important;font-weight: bold!important;
+                                            font-size: 22px!important;border-bottom: 1px #e5e5e5 solid!important;">
+                                                Thông tin người bán</h2>
+                                            <form role="form" class="form-inline form-cnt">
+                                                <div class="form-container">
+
+                                                    <div style="margin-bottom: 10px;">
+                                                        <div><b>Tên:</b> [[${productResponse.sellerName}]]</div>
+                                                    </div>
+                                                    <div style="margin-bottom: 10px;">
+                                                        <div><b>Số điện thoại:</b> [[${productResponse.sellerPhone}]]
+                                                        </div>
+                                                    </div>
+                                                    <div style="margin-bottom: 10px;">
+                                                        <a class="btn btn-upper btn-primary" th:href="@{'/user/room-chat/room?id=' + ${productResponse.userId}}">Chat với
+                                                            người bán
+                                                        </a>
+                                                    </div>
+                                                </div><!-- /.form-container -->
+                                            </form><!-- /.form-cnt -->
+                                        </div><!-- /.product-tab -->
+                                    </div><!-- /.tab-pane -->
+
+                                </div><!-- /.tab-content -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- /.product-tabs -->
+
+                    <!-- ============================================== UPSELL PRODUCTS ============================================== -->
+                    <section class="section featured-product wow fadeInUp">
+                        <h3 class="section-title">Sản phẩm liên quan</h3>
+                        <div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs">
+                            <th:block th:each="product : ${recommendProductList}">
+                                <div class="item item-carousel">
+                                    <div class="products">
+                                        <div class="product">
+                                            <div class="product-image">
+                                                <div class="image"> <a th:href="@{'/product/' + ${product.slug}}"><img
+                                                            th:src="${product.mainImage}" alt=""
+                                                            style="object-fit:contain;width:189px;height:189px;margin-left: 50%;transform: translate(-50%, 0)"></a>
+                                                </div>
+                                                <!-- /.image -->
+                                            </div>
+                                            <!-- /.product-image -->
+                                            <div class="product-info text-left">
+                                                <h3 class="name"><a
+                                                        th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
+                                                </h3>
+                                                <div class="product-price">
+                                                    <span class="price"> [[${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ
+                                                    </span>
+                                                </div>
+                                                <!-- /.product-price -->
+
+                                            </div>
+                                            <!-- /.product-info -->
+                                            <!-- /.cart -->
+                                        </div>
+                                        <!-- /.product -->
+
+                                    </div><!-- /.products -->
+                                </div><!-- /.item -->
+                            </th:block>
+                        </div><!-- /.home-owl-carousel -->
+                    </section><!-- /.section -->
+                    <!-- ============================================== UPSELL PRODUCTS : END ============================================== -->
+
+                </div><!-- /.col -->
+                <div class="clearfix"></div>
+            </div><!-- /.row -->
+        </div><!-- /.container -->
+    </div>
+    <!-- /#top-banner-and-menu -->
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            lazy: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+
+
+
+    </script>
+
+    <script th:inline="javascript">
+        var origin = window.location.origin;
+
+        $(document).ready(function () {
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>

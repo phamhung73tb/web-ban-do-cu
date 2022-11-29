@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin-Home</title>
+    <div th:replace="fragment::head-custom"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h5 class="m-0">Thống kê</h5>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <form>
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <div class="btn btn-default disabled" style="cursor: context-menu;">
+                                        Từ
+                                    </div>
+                                </div>
+                                <input type="date" class="form-control form-control" id="date_from">
+                                <div class="input-group-append">
+                                    <div class="btn btn-default disabled" style="cursor: context-menu;">
+                                        Đến
+                                    </div>
+                                </div>
+                                <input type="date" class="form-control form-control" id="date_to">
+                                <div class="input-group-append">
+                                    <a onclick="filter()" class="btn btn-default">
+                                        Lọc
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-lg-4 col-8">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>[[${newOrder}]]</h3>
+
+                                <p>Đơn hàng mới</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <!-- <a href="#" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a> -->
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <!-- <div class="col-lg-3 col-6">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                                <p>Bounce Rate</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div> -->
+                    <!-- ./col -->
+                    <div class="col-lg-4 col-8">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>[[${newUser}]]</h3>
+
+                                <p>User mới</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <!-- <a href="#" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a> -->
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-4 col-8">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>[[${newProduct}]]</h3>
+
+                                <p>Số sản phẩm mới</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <!-- <a href="#" class="small-box-footer">Xem thêm<i class="fas fa-arrow-circle-right"></i></a> -->
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- Main row -->
+                <div class="row">
+                    <!-- right col (We are only adding the ID to make the widgets sortable)-->
+                    <section class="col-lg-12 connectedSortable">
+
+                        <!-- solid sales graph -->
+                        <div class="card bg-gradient-info">
+                            <div class="card-header border-0">
+                                <h3 class="card-title">
+                                    <i class="fas fa-th mr-1"></i>
+                                    Đơn hàng
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="myChart" style="width:100%;"></canvas>
+                            </div>
+                            <!-- /.card-footer -->
+                        </div>
+                        <!-- /.card -->
+                    </section>
+                    <!-- right col -->
+                </div>
+                <!-- /.row (main row) -->
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div th:replace="fragment::footer-admin"></div>
+
+    <div th:replace="fragment::script-custom"></div>
+
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var from = /*[[${ from }]]*/ '';
+        var to = /*[[${ to }]]*/ '';
+        /*]]>*/
+        var origin = window.location.origin;
+        $(document).ready(function () {
+            document.getElementById("date_from").value = from;
+            document.getElementById("date_to").value = to;
+            document.getElementById('date_from').max = new Date().toLocaleDateString('en-ca');
+            document.getElementById('date_to').max = new Date().toLocaleDateString('en-ca');
+        });
+        function filter() {
+            from = document.getElementById("date_from").value;
+            to = document.getElementById("date_to").value;
+
+            location.href = origin + "/admin/home?from=" + from + "&to=" + to;
+        }
+    </script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var xValues = /*[[${ months }]]*/['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'];
+        var yValues = /*[[${ orders }]]*/[50, 60, 70, 80, 90, 100];
+        /*]]>*/
+
+        var min = Math.min.apply(null, yValues) - 10,
+            max = Math.max.apply(null, yValues) + 10;
+
+        if (min < 0) { min = 0 };
+
+        new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: yValues
+                }]
+            },
+            options: {
+                legend: { display: false },
+                scales: {
+                    yAxes: [{ ticks: { min: min, max: max } }],
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

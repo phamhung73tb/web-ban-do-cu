@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa blog</title>
+    <div th:replace="fragment::head-custom"></div>
+    <!-- include libraries(jQuery, bootstrap) -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" />
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- include summernote css/js-->
+    <!-- summernote -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/summernote/summernote-bs4.min.css}">
+    <!-- Summernote -->
+    <script th:src="@{/assets/plugins/summernote/summernote-bs4.min.js}"></script>
+</head>
+
+<body class="sidebar-mini" style="height: auto; max-width: 100%; overflow-x: hidden;">
+    <div th:replace="fragment::header-admin"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="min-height: 1599.06px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-12">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/blog/get-all}">Quản lý blog</a></li>
+                    <li class="breadcrumb-item active">#[[${blogResponse.id}]]</li>
+                  </ol>
+                </div>
+              </div>
+            </div><!-- /.container-fluid -->
+          </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6" style="    flex: 0 0 100%; max-width: 100%;">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Sửa blog</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form th:action="@{'/admin/blog/edit/'+${blogResponse.id}}" method="post"
+                                th:object="${blogRequest}" enctype="multipart/form-data" id="formCreateblog">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Tiêu đề</label>
+                                        <input type="text" class="form-control" th:id="title" placeholder="Tiêu đề"
+                                            th:name="title" th:value="${blogResponse.title}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nội dung</label>
+                                        <div>
+                                            <textarea id="summernote" th:name="content" th:field="*{content}">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fileImage" class="btn btn-success"><i
+                                                class="fa-solid fa-upload"></i> Chọn ảnh</label>
+                                        <input id="fileImage" th:name="image" type="file"
+                                            accept="image/png, image/jpg, image/jpeg" style="display: none;">
+                                        <img id="thumbnail" alt="image preview" width="200px" style="display: block;"
+                                            th:src="${blogResponse.apiGetImage}" />
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Lưu</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!--/.col (left) -->
+                    <!--/.col (right) -->
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+
+    <div th:replace="fragment::footer-admin"></div>
+
+    <div th:replace="fragment::script-custom"></div>
+
+    <script th:inline="javascript">
+        var origin = window.location.origin;
+        /*<![CDATA[*/
+        var content = /*[[${ blogResponse.content }]]*/ 'Có lỗi xảy ra';
+        /*]]>*/
+
+        $(document).ready(function () {
+            $('#fileImage').change(function () {
+                showImageThumbnail(this);
+            });
+
+            $('#summernote').summernote();
+            $("#summernote").summernote("code", content);
+
+        });
+
+
+        function showImageThumbnail(fileInput) {
+            file = fileInput.files[0];
+            reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#thumbnail').attr('src', e.target.result);
+                document.getElementById('thumbnail').style.display = "block";
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+    </script>
+
+</body>
+
+</html>

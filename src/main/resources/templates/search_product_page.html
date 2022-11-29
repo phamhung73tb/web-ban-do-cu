@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="MediaCenter, Template, eCommerce">
+    <meta name="robots" content="all">
+    <title>Tìm kiếm</title>
+    <div th:replace="fragment::head-custom2"></div>
+    <style>
+        .sidebar .side-menu nav .nav>li {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            -webkit-transition: none;
+            -moz-transition: none;
+            -o-transition: none;
+            transition: none;
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        li.menu-hover_:hover {
+            background-color: rgb(235, 235, 235);
+        }
+
+        .menu-hover_:hover>.dropdown-menu {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ============================================== HEADER ============================================== -->
+    <div th:replace="fragment::header-user"></div>
+
+    <!-- ============================================== HEADER : END ============================================== -->
+
+    <!-- ============================================== HEADER : END ============================================== -->
+    <div class="body-content outer-top-xs">
+        <div class='container'>
+            <div class='row'>
+                <div class='col-md-3 sidebar'>
+                    <!-- ================================== TOP NAVIGATION ================================== -->
+                    <div class="side-menu animate-dropdown outer-bottom-xs">
+                        <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Danh mục</div>
+                        <nav class="yamm megamenu-horizontal" id="menu_" style="font-size: 13px;">
+                            <ul class="nav" xmlns:th="https://www.thymeleaf.org">
+                                <th:block th:each="category: ${menuResponse}">
+                                    <li class="dropdown menu-item menu-hover_"> <a
+                                            th:href="@{'/category/' + ${category.key.slug}}" class="dropdown-toggle"><i
+                                                class="icon fa fa-shopping-bag" aria-hidden="true"></i><span
+                                                style="font-size: 13px;"
+                                                th:text="${category.key.name} ?: _">Lỗi</span></a>
+                                        <ul class="dropdown-menu mega-menu">
+                                            <li class="yamm-content">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <ul class="links list-unstyled">
+                                                            <th:block th:each="childCategory: ${category.value}">
+                                                                <li><a
+                                                                        th:href="@{'/category/' + ${childCategory.slug}}"><span
+                                                                            th:text="${childCategory.name} ?: _">Lỗi</span></a>
+                                                                </li>
+                                                            </th:block>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- /.col -->
+                                                </div>
+                                                <!-- /.row -->
+                                            </li>
+                                            <!-- /.yamm-content -->
+                                        </ul>
+                                        <!-- /.dropdown-menu -->
+                                    </li>
+                                    <!-- /.menu-item -->
+                                </th:block>
+                            </ul>
+                            <!-- /.nav -->
+                        </nav>
+                        <!-- /.megamenu-horizontal -->
+                    </div>
+                    <!-- /.side-menu -->
+                    <!-- ================================== TOP NAVIGATION : END ================================== -->
+                    <div class="sidebar-module-container">
+                        <div class="sidebar-filter">
+                            <!-- ============================================== SIDEBAR CATEGORY ============================================== -->
+
+                            <div class="sidebar-widget wow fadeInUp" style="font-size: 13px;">
+                                <h3 class="section-title">Lọc</h3>
+                                <div class="widget-header">
+                                    <h4 class="widget-title">Loại sản phẩm</h4>
+                                </div>
+                                <div class="sidebar-widget-body">
+                                    <select id="select_category" style="width: 100%;">
+                                        <option value="">Tất cả</option>
+                                        <th:block th:each="category : ${menuResponse}">
+                                            <option th:value="${category.key.slug}">[[${category.key.name}]]</option>
+                                            <th:block th:each="child : ${category.value}">
+                                                <option th:value="${child.slug}">--[[${child.name}]]--</option>
+                                            </th:block>
+                                        </th:block>
+                                    </select>
+                                </div>
+
+                                <div class="widget-header">
+                                    <h4 class="widget-title">Khu vực</h4>
+                                </div>
+                                <div class="sidebar-widget-body">
+                                    <select id="select_location" style="width: 100%;">
+                                        <option value="0">Toàn quốc</option>
+                                    </select>
+                                </div>
+
+                                <div class="widget-header">
+                                    <h4 class="widget-title">Trạng thái</h4>
+                                </div>
+                                <div class="sidebar-widget-body">
+                                    <select id="select_status" style="width: 100%;">
+                                        <option value="all">Tất cả</option>
+                                        <option value="STOCKING">Đang bán</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- /.sidebar-widget -->
+                            <!-- ============================================== SIDEBAR CATEGORY : END ============================================== -->
+
+                            <!-- ============================================== PRICE SILDER============================================== -->
+                            <div class="sidebar-widget wow fadeInUp" style="font-size: 13px;">
+                                <div class="widget-header">
+                                    <h4 class="widget-title">Khoảng giá</h4>
+                                </div>
+                                <div class="sidebar-widget-body m-t-10">
+                                    <div class="price-range-holder">
+                                        <input type="number" id="min_price" min="0" max="30000000" th:value="${min}">
+                                        -
+                                        <input type="number" id="max_price" min="0" max="30000000" th:value="${max}">
+                                        VNĐ
+                                    </div>
+                                    <!-- /.price-range-holder -->
+                                    <a class="lnk btn btn-primary" onclick="filterProduct()">Áp dụng</a>
+                                </div>
+                                <!-- /.sidebar-widget-body -->
+                            </div>
+                            <!-- /.sidebar-widget -->
+                            <!-- ============================================== PRICE SILDER : END ============================================== -->
+
+                            <!-- ============================================== Testimonials: END ============================================== -->
+                        </div>
+                        <!-- /.sidebar-filter -->
+                    </div>
+                    <!-- /.sidebar-module-container -->
+                </div>
+                <!-- /.sidebar -->
+                <div class='col-md-9'>
+                    <!-- ========================================== SECTION – HERO ========================================= -->
+                    <div class="clearfix filters-container">
+                        <div class="row">
+                            <div class="col col-sm-6 col-md-2">
+                                <div class="filter-tabs" style="font-size: 13px;">
+                                    <ul id="filter-tabs" class="nav nav-tabs nav-tab-box nav-tab-fa-icon">
+                                        <li class="active"> <a data-toggle="tab" href="#grid-container"><i
+                                                    class="icon fa fa-th-large"></i></a> </li>
+                                        <li><a data-toggle="tab" href="#list-container"><i
+                                                    class="icon fa fa-th-list"></i></a></li>
+                                    </ul>
+                                </div>
+                                <!-- /.filter-tabs -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col col-sm-12 col-md-6">
+                                <div class="lbl-cnt"> <span class="lbl">Sắp xếp</span>
+                                    <div class="fld inline">
+                                        <div class="dropdown dropdown-small dropdown-med dropdown-white inline">
+                                            <button th:if="${sort} != 'price'" data-toggle="dropdown" type="button"
+                                                class="btn dropdown-toggle">Mới nhất<span class="caret"></span>
+                                            </button>
+                                            <button th:unless="${sort} != 'price'" data-toggle="dropdown" type="button"
+                                                class="btn dropdown-toggle">Giá từ thấp tới cao<span
+                                                    class="caret"></span>
+                                            </button>
+                                            <ul role="menu" class="dropdown-menu">
+                                                <li role="presentation"><a
+                                                        th:href="@{'/search?keyword='+ ${keyword} + '&category_slug=' + ${category_slug} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=price' + '&status=' + ${status}}">Giá
+                                                        từ thấp đến cao</a></li>
+                                                <li role="presentation"><a
+                                                        th:href="@{'/search?keyword='+ ${keyword} + '&category_slug=' + ${category_slug} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=created_date' + '&status=' + ${status}}">Mới
+                                                        nhất</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- /.fld -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col col-sm-6 col-md-4 text-right">
+                                <div class="pagination-container">
+                                    <ul class="list-inline list-unstyled">
+                                        <li th:if="${current_page > 1}" class="prev"><a
+                                                th:href="@{'/search?keyword' + ${keyword} + '&category_slug=' + ${category_slug} + '&page=' + ${current_page - 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
+                                                    class="fa fa-angle-left"></i></a></li>
+                                        <li th:unless="${current_page > 1}" class="prev"><a><i
+                                                    class="fa fa-angle-left"></i></a></li>
+                                        <th:block th:if="${total_page != 0}"
+                                            th:each="i: ${#numbers.sequence(1, total_page)}">
+                                            <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
+                                            <li th:unless="${i == current_page}"><a
+                                                    th:href="@{'/search?keyword' + ${keyword} + '&category_slug=' + ${category_slug} + '&page=' + ${i} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}">[[${i}]]</a>
+                                            </li>
+                                        </th:block>
+                                        <li th:if="${total_page > current_page}" class="next"><a
+                                                th:href="@{'/search?keyword' + ${keyword} + '&category_slug=' + ${category_slug} + '&page=' + ${current_page + 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
+                                                    class="fa fa-angle-right"></i></a></li>
+                                        <li th:unless="${total_page > current_page}" class="next"><a><i
+                                                    class="fa fa-angle-right"></i></a></li>
+                                    </ul>
+                                    <!-- /.list-inline -->
+                                </div>
+                                <!-- /.pagination-container -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <div class="search-result-container ">
+                        <div id="myTabContent" class="tab-content category-list">
+                            <div class="tab-pane active " id="grid-container">
+                                <div class="category-product">
+                                    <div class="row">
+                                        <h4 th:unless="${list_product.size() > 0}" style="text-align: center;">Không tìm
+                                            thấy sản phẩm phù hợp !!!</h4>
+                                        <th:block th:if="${list_product.size() > 0}"
+                                            th:each="product : ${list_product}">
+                                            <div class="col-sm-6 col-md-4 wow fadeInUp">
+                                                <div class="products">
+                                                    <div class="product">
+                                                        <div class="product-image">
+                                                            <div class="image"> <a
+                                                                    th:href="@{'/product/' + ${product.slug}}"><img
+                                                                        th:src="${product.mainImage}" alt=""
+                                                                        style="object-fit:contain; width:250px;height:250px;"></a>
+                                                            </div>
+                                                            <!-- /.image -->
+
+                                                            <div th:if="${product.tag == 'New'}" class="tag new"
+                                                                style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
+                                                                <span>Mới</span>
+                                                            </div>
+                                                            <div th:if="${product.tag == 'Hot'}" class="tag hot"
+                                                                style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
+                                                                <span>Hot</span>
+                                                            </div>
+                                                            <div th:if="${product.tag == 'Đã bán'}" class="tag hot"
+                                                                style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
+                                                                <span>Đã bán</span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.product-image -->
+
+                                                        <div class="product-info text-left">
+                                                            <h3 class="name" style="overflow: hidden;
+                                                            white-space: nowrap;
+                                                            text-overflow: ellipsis;
+                                                            max-width: 250px;" th:title="${product.name}"><a
+                                                                    th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
+                                                            </h3>
+                                                            <!-- <div class="description"></div> -->
+                                                            <div class="product-price"> <span class="price">
+                                                                    [[${#numbers.formatDecimal(product.price, 0,
+                                                                    'COMMA', 0, 'POINT')}]] VNĐ</span>
+                                                            </div>
+                                                            <!-- /.product-price -->
+
+                                                        </div>
+                                                        <!-- /.product-info -->
+                                                        <div class="cart clearfix animate-effect"
+                                                            style="display: flex; justify-content: center; left: 0; margin-left: 0;">
+                                                            <div class="action">
+                                                                <ul class="list-unstyled">
+                                                                    <li class="add-cart-button btn-group">
+                                                                        <a th:href="@{'/user/order/create/' + ${product.id}}"
+                                                                            class="btn btn-primary icon" type="button">
+                                                                            <i class="fa fa-shopping-cart"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="lnk wishlist"> <a class="add-to-cart"
+                                                                            th:data-id="${product.id}"
+                                                                            onclick="addWishlist(this)"
+                                                                            title="Wishlist"> <i
+                                                                                class="icon fa fa-heart"></i> </a> </li>
+
+                                                                </ul>
+                                                            </div>
+                                                            <!-- /.action -->
+                                                        </div>
+                                                        <!-- /.cart -->
+                                                    </div>
+                                                    <!-- /.product -->
+                                                </div>
+                                                <!-- /.products -->
+                                            </div>
+                                        </th:block>
+                                        <!-- /.item -->
+                                    </div>
+                                    <!-- /.row -->
+                                </div>
+                                <!-- /.category-product -->
+
+                            </div>
+                            <!-- /.tab-pane -->
+
+                            <div class="tab-pane " id="list-container">
+                                <div class="category-product">
+                                    <h4 th:unless="${list_product.size() > 0}" style="text-align: center;">Không tìm
+                                        thấy sản phẩm phù hợp !!!</h4>
+                                    <th:block th:if="${list_product.size() > 0}" th:each="product : ${list_product}">
+                                        <div class="category-product-inner wow fadeInUp">
+                                            <div class="products">
+                                                <div class="product-list product">
+                                                    <div class="row product-list-row">
+                                                        <div class="col col-sm-4 col-lg-4">
+                                                            <div class="product-image">
+                                                                <div class="image"> <img th:src="${product.mainImage}"
+                                                                        alt=""
+                                                                        style="object-fit:contain; width:250px;height:250px;">
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.product-image -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                        <div class="col col-sm-8 col-lg-8">
+                                                            <div class="product-info">
+                                                                <h3 class="name"><a
+                                                                        th:href="@{'/product/' + ${product.slug}}">[[${product.name}]]</a>
+                                                                </h3>
+                                                                <div class="product-price">
+                                                                    <span class="price">
+                                                                        [[${#numbers.formatDecimal(product.price, 0,
+                                                                        'COMMA', 0, 'POINT')}]] VNĐ
+                                                                    </span>
+                                                                </div>
+                                                                <!-- /.product-price -->
+                                                                <div class="cart clearfix animate-effect">
+                                                                    <div class="action">
+                                                                        <ul class="list-unstyled">
+                                                                            <li class="add-cart-button btn-group">
+                                                                                <a class="btn btn-primary cart-btn"
+                                                                                    type="button"
+                                                                                    th:href="@{'/user/order/create/' + ${product.id}}">Mua
+                                                                                    ngay</a>
+                                                                            </li>
+                                                                            <li class="lnk wishlist"> <a
+                                                                                    class="add-to-cart"
+                                                                                    th:data-id="${product.id}"
+                                                                                    onclick="addWishlist(this)"
+                                                                                    title="Wishlist">
+                                                                                    <i class="icon fa fa-heart"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <!-- /.action -->
+                                                                </div>
+                                                                <!-- /.cart -->
+
+                                                            </div>
+                                                            <!-- /.product-info -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                    </div>
+                                                    <!-- /.product-list-row -->
+                                                    <div th:if="${product.tag == 'New'}" class="tag new"
+                                                        style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
+                                                        <span>Mới</span>
+                                                    </div>
+                                                    <div th:if="${product.tag == 'Hot'}" class="tag hot"
+                                                        style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
+                                                        <span>Hot</span>
+                                                    </div>
+                                                    <div th:if="${product.tag == 'Đã bán'}" class="tag hot"
+                                                        style="width: 40px;height: 40px;line-height: 40px;letter-spacing: 0;">
+                                                        <span>Đã bán</span>
+                                                    </div>
+                                                </div>
+                                                <!-- /.product-list -->
+                                            </div>
+                                            <!-- /.products -->
+                                        </div>
+                                    </th:block>
+
+                                    <!-- /.category-product-inner -->
+                                </div>
+                                <!-- /.category-product -->
+                            </div>
+                            <!-- /.tab-pane #list-container -->
+                        </div>
+                        <!-- /.tab-content -->
+                        <div class="clearfix filters-container">
+                            <div class="text-right">
+                                <div class="pagination-container">
+                                    <ul class="list-inline list-unstyled">
+                                        <li th:if="${current_page > 1}" class="prev"><a
+                                                th:href="@{'/search?keyword' + ${keyword} + '&category_slug=' + ${category_slug} + '&page=' + ${current_page - 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
+                                                    class="fa fa-angle-left"></i></a></li>
+                                        <li th:unless="${current_page > 1}" class="prev"><a><i
+                                                    class="fa fa-angle-left"></i></a></li>
+                                        <th:block th:if="${total_page != 0}"
+                                            th:each="i: ${#numbers.sequence(1, total_page)}">
+                                            <li th:if="${i == current_page}" class="active"><a>[[${i}]]</a></li>
+                                            <li th:unless="${i == current_page}"><a
+                                                    th:href="@{'/search?keyword' + ${keyword} + '&category_slug=' + ${category_slug} + '&page=' + ${i} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}">[[${i}]]</a>
+                                            </li>
+                                        </th:block>
+                                        <li th:if="${total_page > current_page}" class="next"><a
+                                                th:href="@{'/search?keyword' + ${keyword} + '&category_slug=' + ${category_slug} + '&page=' + ${current_page + 1} + '&min=' + ${min} + '&max=' + ${max} + '&location=' + ${location} + '&sort=' + ${sort} + '&status=' + ${status}}"><i
+                                                    class="fa fa-angle-right"></i></a></li>
+                                        <li th:unless="${total_page > current_page}" class="next"><a><i
+                                                    class="fa fa-angle-right"></i></a></li>
+                                    </ul>
+                                    <!-- /.list-inline -->
+                                </div>
+                                <!-- /.pagination-container -->
+                            </div>
+                            <!-- /.text-right -->
+
+                        </div>
+                        <!-- /.filters-container -->
+
+                    </div>
+                    <!-- /.search-result-container -->
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.body-content -->
+    <!-- ============================================================= FOOTER ============================================================= -->
+    <div th:replace="fragment::footer-user"></div>
+
+    <div th:replace="fragment::script-custom2"></div>
+
+    <script th:inline="javascript">
+        var origin = window.location.origin;
+
+        /*<![CDATA[*/
+        var category_slug = /*[[${category_slug}]]*/ '';
+        var min = /*[[${min}]]*/ '0';
+        var max = /*[[${max}]]*/ '30000000';
+        var location_ = /*[[${location}]]*/ '0';
+        var sort = /*[[${sort}]]*/ 'created_date';
+        var status = /*[[${status}]]*/ 'all';
+        /*]]>*/
+
+        $(document).ready(function () {
+            loadProvince();
+            if (category_slug != null) {
+                document.getElementById('select_category').value = category_slug;
+            }
+
+            if (status == 'STOCKING') {
+                document.getElementById('select_status').value = status
+            }
+        });
+
+        function filterProduct() {
+            location_ = document.getElementById('select_location').value;
+            min = document.getElementById('min_price').value;
+            max = document.getElementById('max_price').value;
+            category_slug = document.getElementById('select_category').value;
+            status = document.getElementById('select_status').value;
+            var keyword = document.getElementById('keyword_').value;
+            location.href = origin + '/search?keyword=' + keyword + '&category_slug=' + category_slug + '&min=' + min + '&max=' + max + '&location=' + location_ + '&sort=' + sort + '&status=' + status;
+        }
+
+        function loadProvince() {
+            var listProvince = document.getElementById("select_location");
+            $('#select_location').empty();
+            listProvince.innerHTML = "<option value='0'>Toàn quốc</option>";
+            $.ajax({
+                method: 'GET',
+                url: "https://provinces.open-api.vn/api/?depth=1",
+            })
+                .done(function (data) {
+                    data.forEach(item => {
+                        var op = document.createElement('option');
+                        op.setAttribute("value", item.code);
+                        op.innerText = item.name;
+                        listProvince.appendChild(op);
+
+                        if (location_ != 0) {
+                            listProvince.value = location_;
+                        }
+                    })
+                })
+                .fail(function () {
+                    toastr.error("Có lỗi xảy ra.");
+                });
+        }
+    </script>
+</body>
+
+</html>
